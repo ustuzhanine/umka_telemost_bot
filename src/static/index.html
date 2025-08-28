@@ -691,7 +691,7 @@
                     this.objects.forEach(obj => {
                         obj.element.style.display = 'block'; // Делаем блочным элементом
                         obj.element.style.visibility = 'visible';
-                        obj.element.style.opacity = '0.3';
+                        obj.element.style.opacity = '1';
                         this.updateElement(obj);
                         delete obj.isNew; // Убираем флаг для начальных объектов
                     });
@@ -713,7 +713,7 @@
                     if (obj.isNew) {
                         obj.element.style.display = 'block'; // Делаем блочным элементом
                         obj.element.style.visibility = 'visible';
-                        obj.element.style.opacity = '0.3';
+                        obj.element.style.opacity = '1';
                         delete obj.isNew; // Убираем флаг после активации
                     }
 
@@ -1120,8 +1120,8 @@
                     scale(${combinedScale})
                 `;
 
-                // Устанавливаем прозрачность
-                obj.element.style.opacity = '0.3';
+                // Устанавливаем непрозрачность объектов (чтобы они были видимы)
+                obj.element.style.opacity = '1';
             }
 
             startAnimation() {
