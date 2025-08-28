@@ -743,21 +743,28 @@
                     // Обновляем вращение
                     obj.rotation += obj.angularVelocity;
                     
-                    // [ВОССТАНОВЛЕНО: Обычное затухание для джелли эффекта, кроме новых объектов]
+                    // Признак опоры: на земле (не в воздухе)
+                    const onGround = (obj.y + obj.height >= this.groundY - 0.5);
+
+                    // [Обновлено: в воздухе вертикальная скорость не демпфируется, чтобы сохранить свободное падение]
+                    // Обычное затухание для джелли эффекта, кроме новых объектов
                     if (obj.newImpactBoost === 0) {
                         // Применяем обычное затухание для джелли эффекта
                         obj.angularVelocity *= (obj.impactBoostCounter > 0) ? currentAngularDamping : effectiveDefaultAngularDamping;
                         obj.vx *= (obj.impactBoostCounter > 0) ? currentDamping : effectiveDefaultDamping;
-                        obj.vy *= (obj.impactBoostCounter > 0) ? currentDamping : effectiveDefaultDamping;
+                        if (onGround) {
+                            obj.vy *= (obj.impactBoostCounter > 0) ? currentDamping : effectiveDefaultDamping;
+                        }
                     }
 
                     // Ограничиваем максимальную скорость для предотвращения мельтешения
-                    const maxSpeed = 8; // Максимальная скорость в любом направлении
-                    if (Math.abs(obj.vx) > maxSpeed) {
-                        obj.vx = Math.sign(obj.vx) * maxSpeed;
+                    const maxVx = 8;   // ограничение горизонтали
+                    const maxVy = 30;  // более высокий кап вертикали, чтобы не мешать свободному падению
+                    if (Math.abs(obj.vx) > maxVx) {
+                        obj.vx = Math.sign(obj.vx) * maxVx;
                     }
-                    if (Math.abs(obj.vy) > maxSpeed) {
-                        obj.vy = Math.sign(obj.vy) * maxSpeed;
+                    if (Math.abs(obj.vy) > maxVy) {
+                        obj.vy = Math.sign(obj.vy) * maxVy;
                     }
                     // Ограничиваем угловую скорость
                     const maxAngularSpeed = 0.1;
@@ -1014,23 +1021,25 @@
                     obj.isStable = true;
                 }
                 
-                // [ВОССТАНОВЛЕНО: Обычные зоны покоя]
+                // [Обновлено: зоны покоя демпфируют vy только при опоре]
                 if (obj.layerDepth > 3 && obj.age > 180) { // Через 3 секунды в нижнем слое
                     obj.isStable = true;
                     obj.vx *= 0.1;
-                    obj.vy *= 0.1;
+                    const onGround = (obj.y + obj.height >= this.groundY - 0.5);
+                    if (onGround) obj.vy *= 0.1;
                     obj.angularVelocity *= 0.05;
                 }
                 
                 // Вычисляем глубину слоя на основе Y-позиции
                 obj.layerDepth = Math.max(0, (this.groundY - obj.y) / 50);
                 
-                // [ВОССТАНОВЛЕНО: Обычное агрессивное затухание для стабильных объектов]
+                // [Обновлено: агрессивное затухание vy только при опоре]
                 if (obj.isStable && obj.newImpactBoost === 0) {
                     // Практически полная остановка стабильных объектов (но НЕ новых)
                     const aggressiveDamping = Math.max(0.3, 0.5 - obj.layerDepth * 0.05);
                     obj.vx *= aggressiveDamping;
-                    obj.vy *= aggressiveDamping;
+                    const onGround = (obj.y + obj.height >= this.groundY - 0.5);
+                    if (onGround) obj.vy *= aggressiveDamping;
                     obj.angularVelocity *= 0.2; // Очень быстрая остановка вращения
                     
                     // Практически полная остановка колебаний
@@ -1039,7 +1048,7 @@
                     
                     // Если скорость очень мала - обнуляем полностью
                     if (Math.abs(obj.vx) < 0.05) obj.vx = 0;
-                    if (Math.abs(obj.vy) < 0.05) obj.vy = 0;
+                    if (onGround && Math.abs(obj.vy) < 0.05) obj.vy = 0;
                     if (Math.abs(obj.angularVelocity) < 0.01) obj.angularVelocity = 0;
                 }
             }
