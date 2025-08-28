@@ -10,8 +10,8 @@
         
         /* Анимированный фон с глассморфизмом */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(180deg, #0b0e12 0%, #263645 50%, #2f3f4f 100%);
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(180deg, #0b0e12 0%, #263645 50%, #4745D7 100%);
             color: var(--tg-theme-text-color, #ffffff);
             padding: 16px; line-height: 1.5;
             min-height: 100vh;
@@ -24,7 +24,7 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2;
-            background: linear-gradient(180deg, #0b0e12 0%, #263645 50%, #2f3f4f 100%) !important;
+            background: linear-gradient(180deg, #0b0e12 0%, #263645 50%, #4745D7 100%) !important;
         }
         
         .floating-shapes {
@@ -222,7 +222,7 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
             backdrop-filter: blur(15px);
             padding: 20px; border-radius: 12px; margin-top: 20px; word-break: break-all;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
+            font-family: 'Montserrat', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
             font-size: 14px; 
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: #ffffff;
@@ -691,7 +691,7 @@
                     this.objects.forEach(obj => {
                         obj.element.style.display = 'block'; // Делаем блочным элементом
                         obj.element.style.visibility = 'visible';
-                        obj.element.style.opacity = '1';
+                        obj.element.style.opacity = '0.3';
                         this.updateElement(obj);
                         delete obj.isNew; // Убираем флаг для начальных объектов
                     });
@@ -1237,5 +1237,22 @@
             }
         });
     </script>
+</script>
+<script>
+  // Ensure Montserrat is loaded and applied globally
+  (function applyMontserratFont() {
+    if (!document.getElementById('font-montserrat')) {
+      const link = document.createElement('link');
+      link.id = 'font-montserrat';
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap';
+      document.head.appendChild(link);
+    }
+    // Define a CSS variable and apply to body for broad coverage
+    const root = document.documentElement;
+    root.style.setProperty('--app-font', "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif");
+    document.body.style.fontFamily = 'var(--app-font)';
+  })();
+</script>
 </body>
 </html>
