@@ -1,0 +1,8 @@
+# Пример файла .env
+# Скопируйте этот файл в .env и укажите ваши данные
+
+# OAuth токен для Яндекс Телемост API
+YANDEX_OAUTH_TOKEN=your_oauth_token_here
+
+# Дополнительные настройки (опционально)
+# CLIENT_ID=your_client_id_here

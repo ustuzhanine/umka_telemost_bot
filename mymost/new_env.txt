@@ -1,0 +1,16 @@
+# OAuth токены для Яндекс Телемост API
+
+# Основной токен доступа (действителен 1 год)
+YANDEX_OAUTH_TOKEN=y0__xCAjNfxBRjQ2zkg84zwkhTuL8XA2q4J0t7bG0gA0lf0gMYT6A
+
+# Refresh токен для обновления access_token
+YANDEX_REFRESH_TOKEN=1:AAA:1:lHYgtNBXUKSqjKRb:0Knc8rDvrRzFvGus0agw0P6G1Tub8wR8XKX9ZjGGWe1VWSiXShpAyug_fNLISZ5FMnYV4w4:8ivBVp
+
+# Срок действия токена (в секундах, 31536000 = 1 год)
+TOKEN_EXPIRES_IN=31536000
+
+# Дополнительные настройки
+CLIENT_ID=d6ae5c6eb0a34355a55a07a7d97e012d
+
+# Настройки логирования
+LOG_LEVEL=INFO

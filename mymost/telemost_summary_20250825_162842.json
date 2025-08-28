@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-08-25T16:28:42.189448",
+  "total_meetings": 4,
+  "meetings": [
+    {
+      "id": "3640774632",
+      "join_url": "https://telemost.360.yandex.ru/j/3640774632",
+      "file": "meeting_3640774632_20250825_161917.json"
+    },
+    {
+      "id": "3666963045",
+      "join_url": "https://telemost.360.yandex.ru/j/3666963045",
+      "file": "meeting_3666963045_20250825_162151.json"
+    },
+    {
+      "id": "4689358269",
+      "join_url": "https://telemost.360.yandex.ru/j/4689358269",
+      "file": "meeting_4689358269_20250825_161910.json"
+    },
+    {
+      "id": "0601415490",
+      "join_url": "https://telemost.360.yandex.ru/j/0601415490",
+      "file": "meeting_0601415490_20250825_161917.json"
+    }
+  ]
+}
