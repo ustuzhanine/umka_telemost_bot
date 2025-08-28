@@ -988,15 +988,63 @@
                             const res = this.satIntersect(polyA, polyB);
                             if (res && res.overlap > 0) {
                                 usedSAT = true;
+                                // Ограничиваем величину сдвига MTV, чтобы уменьшить дрожание
+                                const mtvLen = Math.hypot(res.mtvX, res.mtvY) || 0;
+                                const maxMTV = 6; // px
+                                const scale = mtvLen > maxMTV ? (maxMTV / mtvLen) : 1;
+                                const mtvX = res.mtvX * scale;
+                                const mtvY = res.mtvY * scale;
                                 // Раздвигаем объекты пополам по MTV, учитываем стабильность
                                 const objFactor = obj.isStable ? 0.25 : 0.5;
                                 const otherFactor = other.isStable ? 0.25 : 0.5;
-                                obj.x -= res.mtvX * objFactor;
-                                obj.y -= res.mtvY * objFactor;
-                                other.x += res.mtvX * otherFactor;
-                                other.y += res.mtvY * otherFactor;
+                                obj.x -= mtvX * objFactor;
+                                obj.y -= mtvY * objFactor;
+                                other.x += mtvX * otherFactor;
+                                other.y += mtvY * otherFactor;
                                 obj.polygonDirty = true;
                                 other.polygonDirty = true;
+
+                                // Импульсная коррекция скоростей вдоль нормали, чтобы не повторно проникать
+                                const nxLen = Math.hypot(mtvX, mtvY) || 1;
+                                const nx = (mtvX / nxLen);
+                                const ny = (mtvY / nxLen);
+                                const rvx = obj.vx - other.vx;
+                                const rvy = obj.vy - other.vy;
+                                const vn = rvx * nx + rvy * ny; // относительная скорость вдоль нормали
+                                if (vn < 0) {
+                                    const e = Math.max(0, Math.min(1, this.bounciness)); // коэффициент реституции
+                                    const invMassA = 1 / Math.max(0.001, obj.mass);
+                                    const invMassB = 1 / Math.max(0.001, other.mass);
+                                    const j = -(1 + e) * vn / (invMassA + invMassB);
+                                    const impulseX = j * nx;
+                                    const impulseY = j * ny;
+                                    obj.vx += impulseX * invMassA;
+                                    obj.vy += impulseY * invMassA;
+                                    other.vx -= impulseX * invMassB;
+                                    other.vy -= impulseY * invMassB;
+
+                                    // Простейшая угловая реакция: генерируем вращение пропорционально касательной составляющей
+                                    const tx = -ny, ty = nx; // касательная
+                                    const vt = rvx * tx + rvy * ty;
+                                    const angularK = 0.002; // коэффициент перевода касательной в угловое ускорение
+                                    const cxA = (obj.x + obj.width * 0.5);
+                                    const cyA = (obj.y + obj.height * 0.5);
+                                    const cxB = (other.x + other.width * 0.5);
+                                    const cyB = (other.y + other.height * 0.5);
+                                    const dxA = (cxB - cxA), dyA = (cyB - cyA);
+                                    const armA = dxA * ty - dyA * tx; // плечо силы для A
+                                    const armB = -armA; // для B противоположно
+                                    obj.angularVelocity += angularK * vt * armA;
+                                    other.angularVelocity += angularK * (-vt) * armB;
+                                }
+
+                                // Лёгкое демпфирование после контакта для стабильных объектов, чтобы гасить дрожание
+                                if (obj.isStable) {
+                                    obj.vx *= 0.85; obj.vy *= 0.85; obj.angularVelocity *= 0.8;
+                                }
+                                if (other.isStable) {
+                                    other.vx *= 0.85; other.vy *= 0.85; other.angularVelocity *= 0.8;
+                                }
                             }
                         }
 
