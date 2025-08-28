@@ -71,7 +71,7 @@
         
         .header { 
             text-align: center; margin-bottom: 24px;
-            background: rgba(255, 255, 255, 0.25);  /* Менее прозрачный */
+            background: rgba(255, 255, 255, 0.375);  /* Менее прозрачный */
             backdrop-filter: blur(20px);
             border-radius: 16px;
             padding: 20px;
@@ -93,7 +93,7 @@
         }
         
         .form-section {
-            background: rgba(255, 255, 255, 0.25);  /* Менее прозрачный */
+            background: rgba(255, 255, 255, 0.375);  /* Менее прозрачный */
             backdrop-filter: blur(20px);
             border-radius: 16px; 
             padding: 24px; 
@@ -119,7 +119,7 @@
             width: 100%; padding: 14px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 12px; font-size: 16px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             color: #ffffff;
             transition: all 0.3s ease;
@@ -127,8 +127,8 @@
         input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
             outline: none; 
             border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.225);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
         }
         
         input[type="text"]::placeholder, textarea::placeholder {
@@ -142,7 +142,7 @@
         
         .button {
             width: 100%; padding: 16px; 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));  /* Менее прозрачный */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.525), rgba(255, 255, 255, 0.375));  /* Менее прозрачный */
             backdrop-filter: blur(20px);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.5);  /* Более заметная граница */
@@ -159,7 +159,7 @@
         .button:disabled { opacity: 0.5; cursor: not-allowed; }
         
         .button-secondary {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.075));
             color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -167,7 +167,7 @@
         
         .share-button { 
             padding: 14px; 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.225), rgba(255, 255, 255, 0.15));
             backdrop-filter: blur(15px);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -180,19 +180,19 @@
         .share-button:hover { 
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.375), rgba(255, 255, 255, 0.225));
         }
         
         .share-button.telegram { 
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.3), rgba(0, 136, 204, 0.2));
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.45), rgba(0, 136, 204, 0.3));
         }
         
         .share-button.copy {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15));
         }
         
         .share-button.browser { 
-            background: linear-gradient(135deg, rgba(40, 167, 69, 0.3), rgba(40, 167, 69, 0.2));
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.45), rgba(40, 167, 69, 0.3));
         }
         .loading { 
             display: none; text-align: center; padding: 30px; 
@@ -201,7 +201,7 @@
         }
         
         .error { 
-            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 107, 107, 0.1));
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(255, 107, 107, 0.15));
             backdrop-filter: blur(15px);
             color: #ffffff; 
             padding: 16px; border-radius: 12px; margin-bottom: 20px; display: none;
@@ -210,7 +210,7 @@
         }
         
         .success { 
-            background: linear-gradient(135deg, rgba(72, 219, 251, 0.2), rgba(72, 219, 251, 0.1));
+            background: linear-gradient(135deg, rgba(72, 219, 251, 0.3), rgba(72, 219, 251, 0.15));
             backdrop-filter: blur(15px);
             color: #ffffff; 
             padding: 16px; border-radius: 12px; margin-bottom: 20px; display: none;
@@ -219,7 +219,7 @@
         }
         
         .meeting-link {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.225), rgba(255, 255, 255, 0.15));
             backdrop-filter: blur(15px);
             padding: 20px; border-radius: 12px; margin-top: 20px; word-break: break-all;
             font-family: 'Montserrat', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
@@ -377,7 +377,7 @@
 <div class="container">
     <div class="header">
         <h1>Создание встречи</h1>
-        <p>Создайте встречу в Telemost и поделитесь с контактами</p>
+        <p>Создайте встречу в Telemost, поделитесь с контактами и с Умкой</p>
     </div>
 
     <div id="error-message" class="error"></div>
