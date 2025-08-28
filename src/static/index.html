@@ -755,6 +755,13 @@
                         if (onGround) {
                             obj.vy *= (obj.impactBoostCounter > 0) ? currentDamping : effectiveDefaultDamping;
                         }
+                        // Дополнительное локально-зависимое затухание при "скученности"
+                        const neighborDamping = this.getCrowdDampingFactor(obj);
+                        if (neighborDamping < 1) {
+                            obj.vx *= neighborDamping;
+                            if (onGround) obj.vy *= neighborDamping;
+                            obj.angularVelocity *= neighborDamping;
+                        }
                     }
 
                     // Ограничиваем максимальную скорость для предотвращения мельтешения
@@ -864,9 +871,9 @@
                         other.vx += impulse * obj.mass * normalX * otherStabilityFactor;
                         other.vy += impulse * obj.mass * normalY * otherStabilityFactor;
 
-                        // Активируем impactBoostCounter для обоих объектов
-                        obj.impactBoostCounter = 5; // Активен 5 кадров
-                        other.impactBoostCounter = 5; // Активен 5 кадров
+                        // Активируем impactBoostCounter для обоих объектов (короче для более быстрого затухания)
+                        obj.impactBoostCounter = 3;
+                        other.impactBoostCounter = 3;
 
                         // [УЛУЧШЕНО: Вращение пропорционально силе удара с проверкой свободного места]
                         const tangentX = -normalY;
@@ -1078,6 +1085,23 @@
                         }
                     }
                 });
+            }
+
+            getCrowdDampingFactor(target) {
+                // Считаем ближайших соседей в радиусе, чем больше - тем сильнее локальное затухание
+                const radius = Math.max(target.width, target.height) * 1.2;
+                let neighbors = 0;
+                this.objects.forEach(other => {
+                    if (other === target) return;
+                    const dx = target.x - other.x;
+                    const dy = target.y - other.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < radius) neighbors++;
+                });
+                // Базовый коэффициент: 1 (без доп. затухания)
+                // 2 соседа → 0.9, 3 → 0.8, 4 и более → 0.7 (минимум)
+                const factor = Math.max(0.7, 1 - neighbors * 0.1);
+                return factor;
             }
 
             checkRotationFreedom(obj1, obj2) {
