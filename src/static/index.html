@@ -578,10 +578,10 @@
                 this.objects = [];
                 this.gravity = 0.8;              // [Влияние: Сила, с которой объекты притягиваются вниз. Более высокое значение = более быстрое падение.]
                 // Заменяем this.damping и this.angularDamping на динамические параметры
-                this.defaultDamping = 0.75;       // [Влияние: Сопротивление воздуха по умолчанию. Объекты быстрее успокаиваются.]
-                this.activeDamping = 0.92;       // [Влияние: Сопротивление воздуха для активно движущихся объектов. Движутся дольше.]
-                this.defaultAngularDamping = 0.3; // [Влияние: Затухание угловой скорости по умолчанию. Объекты быстрее прекращают вращаться.]
-                this.activeAngularDamping = 0.6; // [Влияние: Затухание угловой скорости для активно движущихся объектов. Вращаются дольше.]
+                this.defaultDamping = 0.82;       // Сильнее демпфирование по умолчанию
+                this.activeDamping = 0.95;       // Активные движения затухают быстрее
+                this.defaultAngularDamping = 0.4; // Быстрее гасим вращение
+                this.activeAngularDamping = 0.7; // Активное вращение тоже гасим быстрее
                 this.bounciness = 0.45;           // [УЛУЧШЕНО: Увеличено для более естественного отскока желеобразных объектов]
                 this.softness = 0.75;             // [УЛУЧШЕНО: Увеличено для более мягких и плавных столкновений]
                 this.groundY = window.innerHeight; // [Влияние: Уровень земли, с которым объекты сталкиваются. Изменяется с размером окна.]
@@ -591,12 +591,12 @@
                 // Удаляем старые angularDamping и scaleFactor, так как они были заменены
                 this.scaleFactor = 1.2;           // [Влияние: Общий коэффициент увеличения размера всех объектов.]
                 this.dampingTiers = [
-                    { count: 10, damping: 0.78, angularDamping: 0.35 }, // Менее 10 объектов
-                    { count: 15, damping: 0.75, angularDamping: 0.4 },  // 10-14 объектов
-                    { count: 20, damping: 0.72, angularDamping: 0.45 }, // 15-19 объектов
-                    { count: 25, damping: 0.68, angularDamping: 0.5 },  // 20-24 объектов
-                    { count: 30, damping: 0.65, angularDamping: 0.55 }, // 25-29 объектов
-                    { count: Infinity, damping: 0.6, angularDamping: 0.6 } // 30+ объектов - высокая монолитность
+                    { count: 10, damping: 0.84, angularDamping: 0.45 },
+                    { count: 15, damping: 0.82, angularDamping: 0.5 },
+                    { count: 20, damping: 0.8, angularDamping: 0.55 },
+                    { count: 25, damping: 0.78, angularDamping: 0.6 },
+                    { count: 30, damping: 0.76, angularDamping: 0.65 },
+                    { count: Infinity, damping: 0.74, angularDamping: 0.7 }
                 ];
                 this.animationId = null;
                 this.firstFrameDone = false;     // Флаг первого кадра анимации
@@ -632,8 +632,8 @@
                         angularVelocity: 0,               // Начальная угловая скорость
                         isNew: true,                      // Флаг нового объекта
                         squishVelocity: 0,                 // Скорость деформации
-                        newImpactBoost: 5,                  // Счетчик усиления удара для нового объекта
-                        impactBoostCounter: 5,              // Счетчик для активного демпфирования
+                        newImpactBoost: 3,                  // Было 5: быстрее затухает эффект новизны
+                        impactBoostCounter: 3,              // Было 5: короче фаза активного демпфирования
                         // [НОВОЕ: Вторичная анимация для более реалистичного желейного эффекта]
                         secondaryOscillation: 0,            // Вторичные колебания
                         secondaryVelocity: 0,               // Скорость вторичных колебаний
@@ -913,20 +913,20 @@
                         
                         // [НОВОЕ: "Пробуждение" стабильных объектов при сильном ударе]
                         const impactMagnitude = Math.abs(impulse);
-                        if (impactMagnitude > 0.5) {
+                        if (impactMagnitude > 0.7) {
                             // Сильный удар может "разбудить" стабильные объекты
-                            if (obj.isStable && impactMagnitude > 1.0) {
+                            if (obj.isStable && impactMagnitude > 1.5) {
                                 obj.isStable = false;
                                 obj.stabilityCounter = 0;
                             }
-                            if (other.isStable && impactMagnitude > 1.0) {
+                            if (other.isStable && impactMagnitude > 1.5) {
                                 other.isStable = false;
                                 other.stabilityCounter = 0;
                             }
                             
                             // [НОВОЕ: Пробуждаем близлежащие объекты при сильном столкновении]
-                            if (impactMagnitude > 2.0) {
-                                this.wakeUpNearbyObjects(obj.x, obj.y, 100, impactMagnitude);
+                            if (impactMagnitude > 2.5) {
+                                this.wakeUpNearbyObjects(obj.x, obj.y, 80, impactMagnitude);
                             }
                         }
                     }
@@ -1050,11 +1050,11 @@
                 // [Обновлено: агрессивное затухание vy только при опоре]
                 if (obj.isStable && obj.newImpactBoost === 0) {
                     // Практически полная остановка стабильных объектов (но НЕ новых)
-                    const aggressiveDamping = Math.max(0.3, 0.5 - obj.layerDepth * 0.05);
+                    const aggressiveDamping = 0.2; // Жёстко гасим движение для стабильных объектов
                     obj.vx *= aggressiveDamping;
                     const onGround = (obj.y + obj.height >= this.groundY - 0.5);
                     if (onGround) obj.vy *= aggressiveDamping;
-                    obj.angularVelocity *= 0.2; // Очень быстрая остановка вращения
+                    obj.angularVelocity *= 0.1; // Ещё быстрее гасим вращение
                     
                     // Практически полная остановка колебаний
                     obj.secondaryVelocity *= 0.1;
@@ -1079,14 +1079,14 @@
                     if (distance <= radius) {
                         // Чем ближе объект, тем больше вероятность пробуждения
                         const proximityFactor = 1 - (distance / radius);
-                        const wakeThreshold = 2.0 - (proximityFactor * impactMagnitude * 0.5);
+                        const wakeThreshold = 2.5 - (proximityFactor * impactMagnitude * 0.4); // Было 2.0 и 0.5
                         
                         if (impactMagnitude > wakeThreshold) {
                             obj.isStable = false;
                             obj.stabilityCounter = 0;
                             
                             // Добавляем небольшой импульс в сторону от центра удара
-                            const pushForce = (proximityFactor * 0.5);
+                            const pushForce = (proximityFactor * 0.3); // Было 0.5
                             obj.vx += (dx / distance) * pushForce;
                             obj.vy += (dy / distance) * pushForce;
                         }
@@ -1106,8 +1106,8 @@
                     if (dist < radius) neighbors++;
                 });
                 // Базовый коэффициент: 1 (без доп. затухания)
-                // 2 соседа → 0.85, 3 → 0.7, 4 и более → 0.6 (минимум)
-                const factor = Math.max(0.6, 1 - neighbors * 0.15);
+                // 1 сосед → 0.85, 2 → 0.7, 3 → 0.55, 4+ → 0.5 (минимум)
+                const factor = Math.max(0.5, 1 - neighbors * 0.15);
                 return factor;
             }
 
@@ -1194,8 +1194,8 @@
                     angularVelocity: 0,               // Начальная угловая скорость
                     isNew: true,                      // Флаг нового объекта
                     squishVelocity: 0,                 // Скорость деформации
-                    newImpactBoost: 5,                  // Счетчик усиления удара для нового объекта
-                    impactBoostCounter: 0,              // Счетчик для активного демпфирования
+                    newImpactBoost: 3,                  // Было 5: быстрее затухает эффект новизны
+                    impactBoostCounter: 3,              // Было 5: короче фаза активного демпфирования
                     // [НОВОЕ: Вторичная анимация для более реалистичного желейного эффекта]
                     secondaryOscillation: 0,            // Вторичные колебания
                     secondaryVelocity: 0,               // Скорость вторичных колебаний
