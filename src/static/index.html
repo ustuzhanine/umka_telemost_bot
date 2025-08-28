@@ -27,30 +27,33 @@
             background: linear-gradient(180deg, #0b0e12 0%, #263645 50%, #4745D7 100%) !important;
         }
         
+        /* Контейнер для мармеладных объектов */
         .floating-shapes {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
+            z-index: 0; /* Изменено с -1 для видимости */
             overflow: hidden;
+            pointer-events: none;
         }
-        
-        /* Контейнер для снежинок - сюда вставляйте ваши снежинки */
+
+        /* Стили для снежинок */
+        .snowflake {
+            position: absolute;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1; /* Выше чем контейнер */
+            transform-origin: center;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
         /* Новые стили для мармеладных объектов */
         .jelly-object {
             position: absolute;
             user-select: none;
             pointer-events: none;
-            z-index: -1;
+            z-index: 2; /* Выше чем снежинки */
             transform-origin: center;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-        
-        /* Удаляем старые стили - теперь используем физику */
-        
-        /* Убираем старую анимацию - теперь будет JavaScript физика */
-        .floating-shapes {
-            overflow: hidden;
-            height: 100vh;
         }
         
         /* Базовые стили для физических объектов */
@@ -662,7 +665,7 @@
                     // Добавляем класс для физики
                     element.classList.add('jelly-object');
                     element.style.position = 'absolute';
-                    element.style.zIndex = '-1';
+                    // z-index устанавливается через CSS класс
 
                     this.objects.push(obj);
 
