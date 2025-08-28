@@ -587,7 +587,7 @@
                 this.groundY = window.innerHeight - 10; // [Влияние: Уровень земли, с которым объекты сталкиваются. Изменяется с размером окна.]
                 this.friction = 0.88;            // [УЛУЧШЕНО: Уменьшено для менее резкого торможения на земле]
                 this.squishSpringConstant = 0.25; // [УЛУЧШЕНО: Увеличено для более быстрого восстановления формы]
-                this.squishDamping = 0.65;        // [УЛУЧШЕНО: Уменьшено для более длительных колебаний деформации]
+                this.squishDamping = 0.2;        // [УЛУЧШЕНО: Уменьшено для более длительных колебаний деформации]
                 // Удаляем старые angularDamping и scaleFactor, так как они были заменены
                 this.scaleFactor = 1.2;           // [Влияние: Общий коэффициент увеличения размера всех объектов.]
                 this.dampingTiers = [
@@ -633,7 +633,7 @@
                         isNew: true,                      // Флаг нового объекта
                         squishVelocity: 0,                 // Скорость деформации
                         newImpactBoost: 5,                  // Счетчик усиления удара для нового объекта
-                        impactBoostCounter: 0,              // Счетчик для активного демпфирования
+                        impactBoostCounter: 5,              // Счетчик для активного демпфирования
                         // [НОВОЕ: Вторичная анимация для более реалистичного желейного эффекта]
                         secondaryOscillation: 0,            // Вторичные колебания
                         secondaryVelocity: 0,               // Скорость вторичных колебаний
@@ -812,8 +812,8 @@
 
                     // [ОПТИМИЗАЦИЯ: Пропускаем столкновения между стабильными объектами]
                     if (obj.isStable && other.isStable && 
-                        Math.abs(obj.vx) < 0.1 && Math.abs(obj.vy) < 0.1 &&
-                        Math.abs(other.vx) < 0.1 && Math.abs(other.vy) < 0.1) {
+                        Math.abs(obj.vx) < 0.05 && Math.abs(obj.vy) < 0.05 &&
+                        Math.abs(other.vx) < 0.05 && Math.abs(other.vy) < 0.05) {
                         return; // Два спокойных объекта не взаимодействуют
                     }
                     
@@ -829,6 +829,11 @@
                     }
                     const minDistance = ((obj.width + other.width) / 2) * 0.8; // Уменьшаем минимальное расстояние для более плотного прилегания
 
+                    // [НОВОЕ] Жесткое отключение микровзаимодействий глубоких стабильных слоёв
+                    if (obj.isStable && other.isStable && obj.layerDepth > 2 && other.layerDepth > 2) {
+                        return; // нижние стабильные слои не участвуют в микростолкновениях
+                    }
+
                     if (distance < minDistance && distance > 0) {
                         // [КАРДИНАЛЬНО ИЗМЕНЕНО: Очень низкая подвижность для стабильных объектов]
                         const objStabilityFactor = obj.isStable ? Math.max(0.02, 0.1 - obj.layerDepth * 0.02) : 1.0;
@@ -836,11 +841,13 @@
                         
                         // Стабильные объекты в нижних слоях меньше реагируют на столкновения
                         const combinedStabilityFactor = (objStabilityFactor + otherStabilityFactor) / 2;
+                        // Доп. ослабление реакции по глубине слоя (нижние слои реагируют слабее)
+                        const depthAttenuation = Math.max(0.2, 1 - Math.min(obj.layerDepth, other.layerDepth) * 0.25);
                         
                         // Увеличиваем силу разделения объектов для плотного сложения
                         const overlap = minDistance - distance;
-                        const separationX = (dx / distance) * overlap * 1.0 * combinedStabilityFactor;
-                        const separationY = (dy / distance) * overlap * 1.0 * combinedStabilityFactor;
+                        const separationX = (dx / distance) * overlap * 1.0 * combinedStabilityFactor * depthAttenuation;
+                        const separationY = (dy / distance) * overlap * 1.0 * combinedStabilityFactor * depthAttenuation;
 
                         obj.x += separationX;
                         obj.y += separationY;
@@ -857,7 +864,7 @@
                         if (speed > 0) return;
 
                         // Нормальный импульс для реалистичного отскока
-                        let impulse = 2 * speed / (obj.mass + other.mass) * this.softness;
+                        let impulse = 2 * speed / (obj.mass + other.mass) * this.softness * depthAttenuation;
                         // Усиливаем импульс, если один из объектов - новый и имеет активный boost
                         if (obj.newImpactBoost > 0 || other.newImpactBoost > 0) {
                             impulse *= 1.2; // Увеличиваем импульс на 20%
@@ -872,8 +879,8 @@
                         other.vy += impulse * obj.mass * normalY * otherStabilityFactor;
 
                         // Активируем impactBoostCounter для обоих объектов (короче для более быстрого затухания)
-                        obj.impactBoostCounter = 3;
-                        other.impactBoostCounter = 3;
+                        obj.impactBoostCounter = 2;
+                        other.impactBoostCounter = 2;
 
                         // [УЛУЧШЕНО: Вращение пропорционально силе удара с проверкой свободного места]
                         const tangentX = -normalY;
@@ -882,7 +889,7 @@
                         // Вращение пропорционально силе удара
                         const impactForce = Math.abs(impulse);
                         const baseAngularImpulse = (relativeVx * tangentX + relativeVy * tangentY) * 0.008;
-                        const scaledAngularImpulse = baseAngularImpulse * Math.min(1.0, impactForce * 0.5);
+                        const scaledAngularImpulse = baseAngularImpulse * Math.min(1.0, impactForce * 0.5) * depthAttenuation;
                         
                         // Проверяем "свободное место" для вращения (есть ли близкие объекты)
                         const rotationFreedom = this.checkRotationFreedom(obj, other);
@@ -1099,8 +1106,8 @@
                     if (dist < radius) neighbors++;
                 });
                 // Базовый коэффициент: 1 (без доп. затухания)
-                // 2 соседа → 0.9, 3 → 0.8, 4 и более → 0.7 (минимум)
-                const factor = Math.max(0.7, 1 - neighbors * 0.1);
+                // 2 соседа → 0.85, 3 → 0.7, 4 и более → 0.6 (минимум)
+                const factor = Math.max(0.6, 1 - neighbors * 0.15);
                 return factor;
             }
 
@@ -1253,6 +1260,6 @@
     root.style.setProperty('--app-font', "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif");
     document.body.style.fontFamily = 'var(--app-font)';
   })();
-</script>
+    </script>
 </body>
 </html>
