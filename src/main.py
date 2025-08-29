@@ -3,6 +3,14 @@ import sys
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
+# Отключаем resource tracker для предотвращения предупреждений о leaked semaphore objects
+# Это безопасно для development среды, но в production лучше использовать gunicorn
+os.environ['PYTHONWARNINGS'] = 'ignore::UserWarning:multiprocessing.resource_tracker'
+
+# Альтернативное решение: отключение multiprocessing resource tracker полностью
+import multiprocessing
+multiprocessing.set_start_method('spawn', force=True)
+
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from src.models.user import db

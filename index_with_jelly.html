@@ -4,25 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telemost Meeting Creator</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        :root { 
-            --block-gap: 16px; 
-            --font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         /* Анимированный фон с глассморфизмом */
         body {
-            font-family: var(--font-family);
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(180deg, #0b0e12 0%, #263645 50%, #4745D7 100%);
             color: var(--tg-theme-text-color, #ffffff);
             padding: 16px; line-height: 1.5;
@@ -43,10 +31,9 @@
         .floating-shapes {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; /* Держим фоновыми, чтобы их точно было видно под UI */
+            z-index: 0; /* Изменено с -1 для видимости */
             overflow: hidden;
             pointer-events: none;
-            display: none; /* Временно отключаем показ объектов */
         }
 
         /* Стили для снежинок */
@@ -86,7 +73,7 @@
         }
         
         .header { 
-            text-align: center; margin-bottom: var(--block-gap);
+            text-align: center; margin-bottom: 24px;
             background: rgba(255, 255, 255, 0.375);  /* Менее прозрачный */
             backdrop-filter: blur(20px);
             border-radius: 16px;
@@ -96,15 +83,15 @@
         }
         
         .header h1 { 
-            font-size: 20px; font-weight: 700;
+            font-size: 28px; font-weight: 700;
             color: #ffffff; 
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .header p { 
             color: rgba(255, 255, 255, 0.8); 
-            font-size: 14px; 
+            font-size: 16px; 
             font-weight: 400;
         }
         
@@ -113,7 +100,7 @@
             backdrop-filter: blur(20px);
             border-radius: 16px; 
             padding: 24px; 
-            margin-bottom: var(--block-gap);
+            margin-bottom: 20px;
             border: 1px solid rgba(255, 255, 255, 0.4);  /* Более заметная граница */
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);   /* Более заметная тень */
         }
@@ -134,11 +121,10 @@
         input[type="text"], input[type="email"], textarea, select {
             width: 100%; padding: 14px;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px; font-size: 13px;
+            border-radius: 12px; font-size: 16px;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             color: #ffffff;
-            text-align: center;
             transition: all 0.3s ease;
         }
         input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
@@ -164,23 +150,13 @@
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.5);  /* Более заметная граница */
             border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s ease; margin-bottom: var(--block-gap);
+            transition: all 0.3s ease; margin-bottom: 12px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);   /* Более заметная тень */
         }
         .button:hover { 
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.35));  /* Еще менее прозрачный при наведении */
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);  /* Более заметная тень при наведении */
-        }
-
-        /* Создать встречу: зелёный стеклянный стиль как у остальных кнопок */
-        #create-form .button {
-            background: linear-gradient(135deg, rgba(0, 255, 0, 0.35), rgba(0, 255, 0, 0.2)) !important;
-            border-color: rgba(0, 255, 0, 0.45) !important;
-            color: #ffffff !important;
-        }
-        #create-form .button:hover {
-            background: linear-gradient(135deg, rgba(0, 255, 0, 0.5), rgba(0, 255, 0, 0.3)) !important;
         }
         
         .button:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -190,14 +166,14 @@
             color: rgba(255, 255, 255, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .share-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--block-gap); margin-top: var(--block-gap); }
+        .share-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 20px; }
         
         .share-button { 
             padding: 14px; 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.15));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.225), rgba(255, 255, 255, 0.15));
             backdrop-filter: blur(15px);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer;
             transition: all 0.3s ease; 
             display: flex; align-items: center; justify-content: center; gap: 6px;
@@ -207,54 +183,53 @@
         .share-button:hover { 
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.22));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.375), rgba(255, 255, 255, 0.225));
         }
         
         .share-button.telegram { 
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.50), rgba(0, 136, 204, 0.32));
-            border-color: rgba(0, 136, 204, 0.55);
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.45), rgba(0, 136, 204, 0.3));
         }
         
         .share-button.copy {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.16));
-            border: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.15));
         }
         
         .share-button.browser { 
-            background: linear-gradient(135deg, rgba(40, 167, 69, 0.50), rgba(40, 167, 69, 0.32));
-            border-color: rgba(40, 167, 69, 0.55);
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.45), rgba(40, 167, 69, 0.3));
         }
-        .status-message {
-            text-align: center; 
-            padding: 0 8px 8px 8px; 
-            margin-top: 0;
-            font-size: 16px;
-            font-weight: 400;
-            display: none;
+        .loading { 
+            display: none; text-align: center; padding: 30px; 
             color: rgba(255, 255, 255, 0.8);
-            line-height: 1.2;
-            min-height: 24px;
-            align-items: center;
-            justify-content: center;
+            font-size: 18px;
         }
         
-        .status-message.show {
-            display: flex;
-            margin-top: 0;
+        .error { 
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.3), rgba(255, 107, 107, 0.15));
+            backdrop-filter: blur(15px);
+            color: #ffffff; 
+            padding: 16px; border-radius: 12px; margin-bottom: 20px; display: none;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.1);
         }
         
-
+        .success { 
+            background: linear-gradient(135deg, rgba(72, 219, 251, 0.3), rgba(72, 219, 251, 0.15));
+            backdrop-filter: blur(15px);
+            color: #ffffff; 
+            padding: 16px; border-radius: 12px; margin-bottom: 20px; display: none;
+            border: 1px solid rgba(72, 219, 251, 0.3);
+            box-shadow: 0 4px 16px rgba(72, 219, 251, 0.1);
+        }
         
         .meeting-link {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.225), rgba(255, 255, 255, 0.15));
             backdrop-filter: blur(15px);
-            padding: var(--block-gap); border-radius: 12px; margin-top: var(--block-gap); word-break: break-all;
-            font-family: var(--font-family);
+            padding: 20px; border-radius: 12px; margin-top: 20px; word-break: break-all;
+            font-family: 'Montserrat', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
             font-size: 14px; 
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: #ffffff;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-            display: none;
         }
         .hidden { display: none; }
         .info-box {
@@ -275,8 +250,7 @@
         }
 
         .snowflake {
-            /* Раньше скрывали по умолчанию. Теперь показываем и управляем видимостью из JS */
-            display: block;
+            display: none; /* Полностью скрываем по умолчанию */
             position: absolute; /* Гарантируем абсолютное позиционирование */
         }
     </style>
@@ -405,15 +379,22 @@
 
 <div class="container">
     <div class="header">
-        <h1>Яндекс-телемост одной кнопкой</h1>
-        <p>Создайте встречу в Telemost, поделитесь с контактами и с Умкой для анализа</p>
+        <h1>Создание встречи</h1>
+        <p>Создайте встречу в Telemost, поделитесь с контактами и с Умкой</p>
     </div>
 
-
+    <div id="error-message" class="error"></div>
+    <div id="success-message" class="success"></div>
 
     <div id="create-form">
-        <div class="form-group" style="margin-bottom: var(--block-gap);">
-            <input type="text" id="meeting-title" placeholder="Здесь вы можете дать название встрече">
+        <div class="form-section">
+            <h2>Настройки встречи</h2>
+
+            <div class="form-group">
+                <label for="meeting-title">Название встречи (опционально)</label>
+                <input type="text" id="meeting-title" placeholder="Введите название встречи">
+            </div>
+            <!-- Уровень доступа удален: всегда PUBLIC -->
         </div>
 
         <button type="button" class="button" onclick="createMeeting()">
@@ -421,75 +402,73 @@
         </button>
     </div>
 
-    <div id="status-message" class="status-message"></div>
+    <div id="loading" class="loading">
+        <p>Создание встречи...</p>
+    </div>
 
-    <div id="result">
+    <div id="result" class="hidden">
         <div class="form-section">
-            <h2 id="result-title" style="display:none;">✅ Готово!</h2>
+            <h2>✅ Встреча создана!</h2>
             <div class="meeting-link" id="meeting-link"></div>
 
             <div class="share-options">
-                <button type="button" class="share-button telegram" onclick="shareToTelegram()" disabled>
+                <button type="button" class="share-button telegram" onclick="shareToTelegram()">
                     Поделиться в Telegram
                 </button>
-                <button type="button" class="share-button copy" onclick="copyToClipboard()" disabled>
+                <button type="button" class="share-button copy" onclick="copyToClipboard()">
                     Скопировать ссылку
                 </button>
-                <button type="button" class="share-button browser" onclick="openInBrowser()" disabled>
+                <button type="button" class="share-button browser" onclick="openInBrowser()">
                     Перейти в браузер
                 </button>
             </div>
 
-            
+            <button type="button" class="button button-secondary" onclick="resetForm()" style="margin-top: 16px;">
+                Создать новую встречу
+            </button>
         </div>
     </div>
 </div>
 
 <script>
-    // Инициализация Telegram Web App (без падения вне Telegram)
-    const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
-    if (tg) {
-        try { tg.expand(); tg.ready(); } catch(e) {}
-        try {
-            document.documentElement.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color || '#ffffff');
-            document.documentElement.style.setProperty('--tg-theme-text-color', tg.themeParams.text_color || '#000000');
-            document.documentElement.style.setProperty('--tg-theme-hint-color', tg.themeParams.hint_color || '#999999');
-            document.documentElement.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color || '#0088cc');
-            document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.themeParams.button_text_color || '#ffffff');
-            document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', tg.themeParams.secondary_bg_color || '#f8f9fa');
-            document.documentElement.style.setProperty('--tg-theme-section-separator-color', tg.themeParams.section_separator_color || '#e5e5e5');
-        } catch(e) {}
-    }
+    // Инициализация Telegram Web App
+    let tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
+
+    // Применяем тему Telegram
+    document.documentElement.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color || '#ffffff');
+    document.documentElement.style.setProperty('--tg-theme-text-color', tg.themeParams.text_color || '#000000');
+    document.documentElement.style.setProperty('--tg-theme-hint-color', tg.themeParams.hint_color || '#999999');
+    document.documentElement.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color || '#0088cc');
+    document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.themeParams.button_text_color || '#ffffff');
+    document.documentElement.style.setProperty('--tg-theme-secondary-bg-color', tg.themeParams.secondary_bg_color || '#f8f9fa');
+    document.documentElement.style.setProperty('--tg-theme-section-separator-color', tg.themeParams.section_separator_color || '#e5e5e5');
 
     let currentMeetingData = null;
-    
-    // Глобальная функция управления доступностью кнопок шаринга (на случай, если второй скрипт не загрузится)
-    function updateShareButtonsState() {
-        const hasData = !!currentMeetingData && !!currentMeetingData.join_url;
-        const telegramBtn = document.querySelector('.share-button.telegram');
-        const copyBtn = document.querySelector('.share-button.copy');
-        const browserBtn = document.querySelector('.share-button.browser');
-        [telegramBtn, copyBtn, browserBtn].forEach(btn => { if (btn) btn.disabled = !hasData; });
+
+    function showError(message) {
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
     }
 
-    function showStatus(message, type = 'success') {
-        const statusDiv = document.getElementById('status-message');
-        statusDiv.textContent = message;
-        statusDiv.className = 'status-message show';
-        
-        // Автоматически скрываем через 3 секунды для success, через 6 для error
-        const timeout = type === 'error' ? 6000 : 3000;
-        setTimeout(() => { 
-            statusDiv.className = 'status-message';
-        }, timeout);
+    function showSuccess(message) {
+        const successDiv = document.getElementById('success-message');
+        successDiv.textContent = message;
+        successDiv.style.display = 'block';
+        setTimeout(() => { successDiv.style.display = 'none'; }, 5000);
     }
 
     // Создание встречи — уровень доступа всегда PUBLIC
     async function createMeeting() {
+        const loading = document.getElementById('loading');
         const form = document.getElementById('create-form');
 
         try {
-            showStatus('Создание встречи...', 'loading');
+            loading.style.display = 'block';
+            form.style.display = 'none';
 
             const meetingData = {
                 waiting_room_level: 'PUBLIC',
@@ -507,19 +486,20 @@
 
             currentMeetingData = result;
 
-            const meetingLinkElement = document.getElementById('meeting-link');
-            meetingLinkElement.textContent = result.join_url;
-            meetingLinkElement.style.display = 'block';
-            updateShareButtonsState();
-            showStatus('Встреча успешно создана!', 'success');
+            document.getElementById('meeting-link').textContent = result.join_url;
+            document.getElementById('result').classList.remove('hidden');
+            showSuccess('Встреча успешно создана!');
         } catch (error) {
             console.error('Ошибка:', error);
-            showStatus(error.message || 'Произошла ошибка при создании встречи', 'error');
+            showError(error.message || 'Произошла ошибка при создании встречи');
+            form.style.display = 'block';
+        } finally {
+            loading.style.display = 'none';
         }
     }
 
     function shareToTelegram() {
-  if (!currentMeetingData) { showStatus('Нет данных встречи для отправки', 'error'); return; }
+  if (!currentMeetingData) { showError('Нет данных встречи для отправки'); return; }
 
   const meetingTitle = currentMeetingData.title || 'Встреча в Telemost';
   const meetingUrl = currentMeetingData.join_url;
@@ -533,7 +513,7 @@
 
 
     async function copyToClipboard() {
-        if (!currentMeetingData) { showStatus('Нет данных встречи для копирования', 'error'); return; }
+        if (!currentMeetingData) { showError('Нет данных встречи для копирования'); return; }
 
         const meetingTitle = currentMeetingData.title || 'Встреча в Telemost';
         const meetingUrl = currentMeetingData.join_url;
@@ -542,7 +522,7 @@
         try {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(copyText);
-                showStatus('Ссылка скопирована в буфер обмена!', 'success');
+                showSuccess('Ссылка скопирована в буфер обмена!');
             } else {
                 const textArea = document.createElement('textarea');
                 textArea.value = copyText;
@@ -551,18 +531,18 @@
                 textArea.style.top = '-999999px';
                 document.body.appendChild(textArea);
                 textArea.focus(); textArea.select();
-                try { document.execCommand('copy'); showStatus('Ссылка скопирована в буфер обмена!', 'success'); }
-                catch { showStatus('Не удалось скопировать ссылку', 'error'); }
+                try { document.execCommand('copy'); showSuccess('Ссылка скопирована в буфер обмена!'); }
+                catch { showError('Не удалось скопировать ссылку'); }
                 document.body.removeChild(textArea);
             }
         } catch (err) {
             console.error('Ошибка копирования:', err);
-            showStatus('Не удалось скопировать ссылку', 'error');
+            showError('Не удалось скопировать ссылку');
         }
     }
 
     function openInBrowser() {
-        if (!currentMeetingData) { showStatus('Нет данных встречи для открытия', 'error'); return; }
+        if (!currentMeetingData) { showError('Нет данных встречи для открытия'); return; }
         
         const meetingUrl = currentMeetingData.join_url;
         
@@ -570,70 +550,47 @@
             // Для Telegram Web App используем специальный метод
             if (tg && tg.openLink) {
                 tg.openLink(meetingUrl);
-                showStatus('Встреча открыта в браузере!', 'success');
+                showSuccess('Встреча открыта в браузере!');
             } else {
                 // Обычное открытие в новой вкладке
                 window.open(meetingUrl, '_blank');
-                showStatus('Встреча открыта в новой вкладке!', 'success');
+                showSuccess('Встреча открыта в новой вкладке!');
             }
         } catch (error) {
             console.error('Ошибка открытия в браузере:', error);
-            showStatus('Не удалось открыть ссылку в браузере', 'error');
+            showError('Не удалось открыть ссылку в браузере');
         }
     }
 
     function resetForm() {
         document.getElementById('meeting-title').value = '';
-        const meetingLinkElement = document.getElementById('meeting-link');
-        meetingLinkElement.textContent = '';
-        meetingLinkElement.style.display = 'none';
+        document.getElementById('create-form').style.display = 'block';
+        document.getElementById('result').classList.add('hidden');
         currentMeetingData = null;
-        updateShareButtonsState();
     }
 
-    if (tg && tg.MainButton) {
-        try {
-            tg.onEvent('mainButtonClicked', function() { /* доп. логика при клике */ });
-            tg.MainButton.setText('Создать встречу');
-            tg.MainButton.onClick(createMeeting);
-        } catch(e) {}
-    }
+    tg.onEvent('mainButtonClicked', function() { /* доп. логика при клике */ });
+    tg.MainButton.setText('Создать встречу');
+    tg.MainButton.onClick(createMeeting);
     </script>
 
     <script>
-        // Флаг для полного отключения джелли-физики и фоновых объектов
-        const ENABLE_JELLY = false;
-    <script>
-        // Управление доступностью кнопок шаринга
-        function updateShareButtonsState() {
-            const hasData = !!currentMeetingData && !!currentMeetingData.join_url;
-            const telegramBtn = document.querySelector('.share-button.telegram');
-            const copyBtn = document.querySelector('.share-button.copy');
-            const browserBtn = document.querySelector('.share-button.browser');
-            [telegramBtn, copyBtn, browserBtn].forEach(btn => { if (btn) btn.disabled = !hasData; });
-        }
-
-        // Установим корректное начальное состояние кнопок при загрузке
-        document.addEventListener('DOMContentLoaded', () => {
-            try { updateShareButtonsState(); } catch(e) {}
-        });
-
-        // 🍯 Мармеладная физика (отключена, если ENABLE_JELLY=false)
+        // 🍯 Мармеладная физика 
         class JellyPhysics {
             constructor() {
                 this.objects = [];
                 this.gravity = 0.8;               // Гравитация падения. БОЛЬШЕ → быстрее падают новые объекты (лежащее не трогает).
                 // Демпфирование скоростей (множители 0..1, применяются каждый кадр): МЕНЬШЕ → быстрее успокаивается
-                this.defaultDamping = 0.68;       // Сильнее гасим «старые» объекты (меньше двигаются со временем)
-                this.activeDamping = 0.96;        // Новые объекты затухают медленнее, дольше «живут»
-                this.defaultAngularDamping = 0.25; // Сильнее гасим вращение у «старых» объектов
+                this.defaultDamping = 0.82;       // Линейное демпфирование по умолчанию (vx/vy). Крути для общего «успокоения» стека.
+                this.activeDamping = 0.95;        // Демпфирование в активной фазе (после удара/падения). МЕНЬШЕ → новички затухают быстрее.
+                this.defaultAngularDamping = 0.4; // Демпфирование вращения по умолчанию. МЕНЬШЕ → быстрее гасит вращение.
                 this.activeAngularDamping = 0.7;  // Демпфирование вращения в активной фазе. МЕНЬШЕ → быстрее гасит вращение новичков.
                 this.bounciness = 0.45;           // Упругость отскока от земли (0..1). МЕНЬШЕ → ниже отскок, спокойнее.
                 this.softness = 0.75;             // «Мягкость» столкновений (умножает импульс). МЕНЬШЕ → мягче толкаются, меньше хаоса.
                 this.groundY = window.innerHeight; // Уровень «земли». Не менять, чтобы не появлялся зазор снизу.
                 this.friction = 0.88;             // Трение по земле (множитель для vx при отскоке). МЕНЬШЕ → сильнее тормозит по земле.
-                this.squishSpringConstant = 0.2;  // Понижаем жёсткость, меньше упругих колебаний
-                this.squishDamping = 0.8;         // Сильно увеличиваем демпфирование деформации для минимального дрожания
+                this.squishSpringConstant = 0.32; // Жесткость пружины деформации (форма → норме). БОЛЬШЕ → быстрее выпрямляется.
+                this.squishDamping = 0.55;        // Демпфирование колебаний деформации. БОЛЬШЕ → меньше «желейности»/дрожания.
                 // Удаляем старые angularDamping и scaleFactor, так как они были заменены
                 this.scaleFactor = 1.2;           // Масштаб размеров SVG. БОЛЬШЕ → крупнее и тяжелее объекты.
                 // Ступени демпфирования по количеству объектов: подменяют «по умолчанию». МЕНЬШЕ значения → быстрее замирает толпа.
@@ -659,9 +616,6 @@
                 }
 
                 const elements = container.querySelectorAll('.snowflake');
-                if (!elements || elements.length === 0) {
-                    console.warn('Нет элементов .snowflake в .floating-shapes');
-                }
                 console.log(`Найдено ${elements.length} объектов для физики`);
 
                 elements.forEach((element, index) => {
@@ -687,7 +641,7 @@
                         // [НОВОЕ: Вторичная анимация для более реалистичного желейного эффекта]
                         secondaryOscillation: 0,            // Вторичные колебания
                         secondaryVelocity: 0,               // Скорость вторичных колебаний
-                        secondaryDamping: 0.85,             // Сильнее гасим вторичные колебания
+                        secondaryDamping: 0.92,             // Затухание вторичных колебаний
                         // [НОВОЕ: Система стабильности для реалистичного поведения слоев]
                         age: 0,                             // Возраст объекта (кадры с момента создания)
                         stabilityCounter: 0,                // Счетчик стабильности (время без значительного движения)
@@ -706,7 +660,7 @@
                     element.style.left = 'auto';
                     element.style.top = 'auto';
                     element.style.transform = 'none'; // Отключаем трансформации
-                    element.style.visibility = 'visible'; // Не скрываем, чтобы сразу было видно
+                    element.style.visibility = 'hidden'; // Полностью скрываем объект
 
                     // Добавляем класс для физики
                     element.classList.add('jelly-object');
@@ -722,8 +676,8 @@
                 this.startAnimation();
             }
 
-            // Строим локальный выпуклый контур из SVG path с семплированием по 64 точкам (достаточно для наших форм)
-            buildLocalPolygon(element, pointCount = 64) {
+            // Строим локальный выпуклый контур из SVG path с семплированием по 32 точкам
+            buildLocalPolygon(element, pointCount = 32) {
                 try {
                     const svg = element.querySelector('svg');
                     if (!svg) return null;
@@ -784,12 +738,11 @@
                 const cy = obj.y + obj.height / 2;
                 const cos = Math.cos(obj.rotation);
                 const sin = Math.sin(obj.rotation);
-                const scale = obj.squish; // obj.width уже учитывает scaleFactor, здесь добавляем только squish
 
                 const poly = obj.localPolygon.map(lp => {
                     // локальные 0..1 → размер объекта в px, затем поворот вокруг центра и перенос в (x,y)
-                    const lx = lp.x * obj.width * scale;
-                    const ly = lp.y * obj.height * scale;
+                    const lx = lp.x * obj.width;
+                    const ly = lp.y * obj.height;
                     const ox = obj.x + lx;
                     const oy = obj.y + ly;
                     // перенос к центру для вращения
@@ -860,12 +813,12 @@
 
             getElementWidth(element) {
                 const svg = element.querySelector('svg');
-                return (svg ? parseInt(svg.getAttribute('width')) || 50 : 50);
+                return (svg ? parseInt(svg.getAttribute('width')) || 50 : 50) * this.scaleFactor;
             }
 
             getElementHeight(element) {
                 const svg = element.querySelector('svg');
-                return (svg ? parseInt(svg.getAttribute('height')) || 50 : 50);
+                return (svg ? parseInt(svg.getAttribute('height')) || 50 : 50) * this.scaleFactor;
             }
 
             getElementMass(element) {
@@ -880,17 +833,14 @@
                 // На первом кадре активируем все объекты
                 if (!this.firstFrameDone) {
                     this.objects.forEach(obj => {
-                        obj.element.style.display = 'block';
+                        obj.element.style.display = 'block'; // Делаем блочным элементом
                         obj.element.style.visibility = 'visible';
-                        obj.element.style.opacity = '0.6';
+                        obj.element.style.opacity = '0.3';
                         this.updateElement(obj);
                         delete obj.isNew; // Убираем флаг для начальных объектов
                     });
                     this.firstFrameDone = true;
                 }
-
-                // [НОВОЕ: Дополнительная проверка на пересечения после движения]
-                this.performPostCollisionCheck();
 
                 // Уменьшаем newImpactBoost и impactBoostCounter для всех объектов
                 this.objects.forEach(obj => {
@@ -905,10 +855,10 @@
                 this.objects.forEach((obj, index) => {
                     // Активируем новые объекты
                     if (obj.isNew) {
-                        obj.element.style.display = 'block';
+                        obj.element.style.display = 'block'; // Делаем блочным элементом
                         obj.element.style.visibility = 'visible';
                         obj.element.style.opacity = '1';
-                        delete obj.isNew;
+                        delete obj.isNew; // Убираем флаг после активации
                     }
 
                     // ВСЕГДА применяем гравитацию - объекты должны падать!
@@ -921,7 +871,6 @@
                     obj.polygonDirty = true;
 
                     // Определяем текущие параметры демпфирования
-                    // Новые (impactBoostCounter>0) более «живые», старые — сильнее демпфируются
                     const currentDamping = (obj.impactBoostCounter > 0) ? this.activeDamping : this.defaultDamping;
                     const currentAngularDamping = (obj.impactBoostCounter > 0) ? this.activeAngularDamping : this.defaultAngularDamping;
 
@@ -949,12 +898,10 @@
                     // Обычное затухание для джелли эффекта, кроме новых объектов
                     if (obj.newImpactBoost === 0) {
                         // Применяем обычное затухание для джелли эффекта
-                        // Сильнее гасим старых: применяем дополнительный возрастной фактор
-                        const ageFactor = Math.min(1, Math.max(0.4, 1 - obj.age * 0.001)); // от 1 → 0.4
-                        obj.angularVelocity *= ((obj.impactBoostCounter > 0) ? currentAngularDamping : effectiveDefaultAngularDamping) * ageFactor;
-                        obj.vx *= ((obj.impactBoostCounter > 0) ? currentDamping : effectiveDefaultDamping) * ageFactor;
+                        obj.angularVelocity *= (obj.impactBoostCounter > 0) ? currentAngularDamping : effectiveDefaultAngularDamping;
+                        obj.vx *= (obj.impactBoostCounter > 0) ? currentDamping : effectiveDefaultDamping;
                         if (onGround) {
-                            obj.vy *= ((obj.impactBoostCounter > 0) ? currentDamping : effectiveDefaultDamping) * ageFactor;
+                            obj.vy *= (obj.impactBoostCounter > 0) ? currentDamping : effectiveDefaultDamping;
                         }
                         // Дополнительное локально-зависимое затухание при "скученности"
                         const neighborDamping = this.getCrowdDampingFactor(obj);
@@ -975,13 +922,13 @@
                         obj.vy = Math.sign(obj.vy) * maxVy;
                     }
                     // Ограничиваем угловую скорость
-                    const maxAngularSpeed = 0.06; // меньше предельной угловой скорости
+                    const maxAngularSpeed = 0.1;
                     if (Math.abs(obj.angularVelocity) > maxAngularSpeed) {
                         obj.angularVelocity = Math.sign(obj.angularVelocity) * maxAngularSpeed;
                     }
 
                                         // [ВОССТАНОВЛЕНО: Проверяем любое движение для определения активности]
-                    const isReallyMoving = Math.abs(obj.vx) > 0.03 || Math.abs(obj.vy) > 0.03 || !obj.isStable || obj.newImpactBoost > 0; // чуть выше пороги
+                    const isReallyMoving = Math.abs(obj.vx) > 0.02 || Math.abs(obj.vy) > 0.02 || !obj.isStable || obj.newImpactBoost > 0;
 
                     if (isReallyMoving) {
                         // Движущиеся и новые объекты: полная физика
@@ -1041,38 +988,24 @@
                         const polyB = this.getWorldPolygon(other);
                         let usedSAT = false;
                         if (polyA && polyB) {
-                            let res = this.satIntersect(polyA, polyB);
+                            const res = this.satIntersect(polyA, polyB);
                             if (res && res.overlap > 0) {
                                 usedSAT = true;
-                                // Итеративная коррекция MTV для полного устранения проникновения
-                                let iterations = 0;
-                                while (res && res.overlap > 0 && iterations < 1) { // меньше итераций, меньше шансов на «залипание»
-                                    const mtvLen0 = Math.hypot(res.mtvX, res.mtvY) || 0;
-                                    const maxMTV = 10; // немного меньше сдвиг, для стабильности
-                                    const s = mtvLen0 > maxMTV ? (maxMTV / mtvLen0) : 1;
-                                    const mtvX = res.mtvX * s;
-                                    const mtvY = res.mtvY * s;
-                                    // Раздвигаем объекты пополам по MTV, учитываем стабильность
-                                    const objFactor = obj.isStable ? 0.25 : 0.5;
-                                    const otherFactor = other.isStable ? 0.25 : 0.5;
-                                    obj.x -= mtvX * objFactor;
-                                    obj.y -= mtvY * objFactor;
-                                    other.x += mtvX * otherFactor;
-                                    other.y += mtvY * otherFactor;
-                                    obj.polygonDirty = true;
-                                    other.polygonDirty = true;
-                                    // Небольшая позиционная коррекция (slop), чтобы избежать повторного проникновения в покое
-                                    const slop = 0.25; // пикселей — минимальный запас
-                                    obj.x -= res.axis.x * slop * objFactor;
-                                    obj.y -= res.axis.y * slop * objFactor;
-                                    other.x += res.axis.x * slop * otherFactor;
-                                    other.y += res.axis.y * slop * otherFactor;
-                                    // Пересчитываем полигоны и повторяем при необходимости
-                                    polyA = this.getWorldPolygon(obj);
-                                    polyB = this.getWorldPolygon(other);
-                                    res = this.satIntersect(polyA, polyB);
-                                    iterations++;
-                                }
+                                // Ограничиваем величину сдвига MTV, чтобы уменьшить дрожание
+                                const mtvLen = Math.hypot(res.mtvX, res.mtvY) || 0;
+                                const maxMTV = 6; // px
+                                const scale = mtvLen > maxMTV ? (maxMTV / mtvLen) : 1;
+                                const mtvX = res.mtvX * scale;
+                                const mtvY = res.mtvY * scale;
+                                // Раздвигаем объекты пополам по MTV, учитываем стабильность
+                                const objFactor = obj.isStable ? 0.25 : 0.5;
+                                const otherFactor = other.isStable ? 0.25 : 0.5;
+                                obj.x -= mtvX * objFactor;
+                                obj.y -= mtvY * objFactor;
+                                other.x += mtvX * otherFactor;
+                                other.y += mtvY * otherFactor;
+                                obj.polygonDirty = true;
+                                other.polygonDirty = true;
 
                                 // Импульсная коррекция скоростей вдоль нормали, чтобы не повторно проникать
                                 const nxLen = Math.hypot(mtvX, mtvY) || 1;
@@ -1082,8 +1015,7 @@
                                 const rvy = obj.vy - other.vy;
                                 const vn = rvx * nx + rvy * ny; // относительная скорость вдоль нормали
                                 if (vn < 0) {
-                                    // Минимальный отскок между объектами: без реституции и с сильным демпфированием
-                                    const e = 0; // жестко гасим отскок между объектами
+                                    const e = Math.max(0, Math.min(1, this.bounciness)); // коэффициент реституции
                                     const invMassA = 1 / Math.max(0.001, obj.mass);
                                     const invMassB = 1 / Math.max(0.001, other.mass);
                                     const j = -(1 + e) * vn / (invMassA + invMassB);
@@ -1094,10 +1026,10 @@
                                     other.vx -= impulseX * invMassB;
                                     other.vy -= impulseY * invMassB;
 
-                                    // Уменьшаем генерацию вращения
+                                    // Простейшая угловая реакция: генерируем вращение пропорционально касательной составляющей
                                     const tx = -ny, ty = nx; // касательная
                                     const vt = rvx * tx + rvy * ty;
-                                    const angularK = 0.0006; // было 0.002 → сильно меньше
+                                    const angularK = 0.002; // коэффициент перевода касательной в угловое ускорение
                                     const cxA = (obj.x + obj.width * 0.5);
                                     const cyA = (obj.y + obj.height * 0.5);
                                     const cxB = (other.x + other.width * 0.5);
@@ -1107,11 +1039,6 @@
                                     const armB = -armA; // для B противоположно
                                     obj.angularVelocity += angularK * vt * armA;
                                     other.angularVelocity += angularK * (-vt) * armB;
-
-                                    // Сильное пост-демпфирование скоростей, чтобы исключить отскок
-                                    const postDamp = 0.2; // оставляем 20% скорости
-                                    obj.vx *= postDamp; obj.vy *= postDamp;
-                                    other.vx *= postDamp; other.vy *= postDamp;
                                 }
 
                                 // Лёгкое демпфирование после контакта для стабильных объектов, чтобы гасить дрожание
@@ -1126,43 +1053,24 @@
 
                         // Если SAT не применился, используем существующий радиальный fallback
                         if (!usedSAT) {
-                         // [УЛУЧШЕНО: Увеличена сила разделения для предотвращения пересечений]
-                        const objStabilityFactor = obj.isStable ? Math.max(0.1, 0.3 - obj.layerDepth * 0.05) : 1.0;
-                        const otherStabilityFactor = other.isStable ? Math.max(0.1, 0.3 - other.layerDepth * 0.05) : 1.0;
-
-                        // Стабильные объекты в нижних слоях меньше реагируют на столкновения
-                        const combinedStabilityFactor = (objStabilityFactor + otherStabilityFactor) / 2;
-                        // Доп. ослабление реакции по глубине слоя (нижние слои реагируют слабее)
-                        const depthAttenuation = Math.max(0.3, 1 - Math.min(obj.layerDepth, other.layerDepth) * 0.15);
-
-                        // Значительно увеличиваем силу разделения объектов + добавляем буферную зону
-                        const overlap = minDistance - distance;
-                        const bufferZone = Math.min(obj.width, obj.height) * 0.05; // 5% буфер от размера объекта
-                        const totalOverlap = overlap + bufferZone;
-                        const separationMultiplier = 1.2; // чуть мягче, чтобы избежать застреваний
-
-                        const separationX = (dx / distance) * totalOverlap * separationMultiplier * combinedStabilityFactor * depthAttenuation;
-                        const separationY = (dy / distance) * totalOverlap * separationMultiplier * combinedStabilityFactor * depthAttenuation;
+                         // [КАРДИНАЛЬНО ИЗМЕНЕНО: Очень низкая подвижность для стабильных объектов]
+                         const objStabilityFactor = obj.isStable ? Math.max(0.02, 0.1 - obj.layerDepth * 0.02) : 1.0;
+                         const otherStabilityFactor = other.isStable ? Math.max(0.02, 0.1 - other.layerDepth * 0.02) : 1.0;
+                         
+                         // Стабильные объекты в нижних слоях меньше реагируют на столкновения
+                         const combinedStabilityFactor = (objStabilityFactor + otherStabilityFactor) / 2;
+                         // Доп. ослабление реакции по глубине слоя (нижние слои реагируют слабее)
+                         const depthAttenuation = Math.max(0.2, 1 - Math.min(obj.layerDepth, other.layerDepth) * 0.25);
+                         
+                         // Увеличиваем силу разделения объектов для плотного сложения
+                         const overlap = minDistance - distance;
+                         const separationX = (dx / distance) * overlap * 1.0 * combinedStabilityFactor * depthAttenuation;
+                         const separationY = (dy / distance) * overlap * 1.0 * combinedStabilityFactor * depthAttenuation;
                          
                          obj.x += separationX;
                          obj.y += separationY;
                          other.x -= separationX;
                          other.y -= separationY;
-                         // Минимизируем отскок в радиальном фоллбэке: гасим относительную скорость вдоль нормали
-                         const nx2 = (dx / distance);
-                         const ny2 = (dy / distance);
-                         const rvx2 = obj.vx - other.vx;
-                         const rvy2 = obj.vy - other.vy;
-                         const vn2 = rvx2 * nx2 + rvy2 * ny2;
-                         if (vn2 < 0) {
-                            obj.vx -= nx2 * vn2 * 0.5;
-                            obj.vy -= ny2 * vn2 * 0.5;
-                            other.vx += nx2 * vn2 * 0.5;
-                            other.vy += ny2 * vn2 * 0.5;
-                         }
-                         // Сильное общее затухание после разделения
-                         obj.vx *= 0.25; obj.vy *= 0.25; obj.angularVelocity *= 0.5;
-                         other.vx *= 0.25; other.vy *= 0.25; other.angularVelocity *= 0.5;
                         obj.polygonDirty = true;
                         other.polygonDirty = true;
                         }
@@ -1227,21 +1135,21 @@
 
                 // [НОВОЕ: Вторичная анимация - мелкие колебания для более реалистичного желейного эффекта]
                 // Вторичные колебания активируются при движении или деформации
-                if (Math.abs(obj.vx) > 0.8 || Math.abs(obj.vy) > 0.8 || Math.abs(obj.squishVelocity) > 0.02) {
-                    obj.secondaryVelocity += (Math.random() - 0.5) * 0.0005; // Меньше случайных микроколебаний
+                if (Math.abs(obj.vx) > 0.5 || Math.abs(obj.vy) > 0.5 || Math.abs(obj.squishVelocity) > 0.01) {
+                    obj.secondaryVelocity += (Math.random() - 0.5) * 0.002; // Случайные микроколебания
                 }
                 
                 // Пружинная модель для вторичных колебаний
-                const secondarySpringForce = -obj.secondaryOscillation * 0.25; // сильнее стремимся к покою
+                const secondarySpringForce = -obj.secondaryOscillation * 0.15;
                 obj.secondaryVelocity += secondarySpringForce;
                 obj.secondaryVelocity *= obj.secondaryDamping;
                 obj.secondaryOscillation += obj.secondaryVelocity;
                 
                 // Применяем вторичные колебания к основной деформации
-                obj.squish += obj.secondaryOscillation * 0.15; // уменьшаем вклад вторичных колебаний
+                obj.squish += obj.secondaryOscillation * 0.3;
 
                 // [УЛУЧШЕНО: Увеличен диапазон деформации для более выраженного желейного эффекта]
-                obj.squish = Math.max(0.9, Math.min(1.1, obj.squish)); // существенно сужаем диапазон
+                obj.squish = Math.max(0.7, Math.min(1.4, obj.squish));
             }
 
             updateStability(obj) {
@@ -1378,62 +1286,9 @@
                 return crowdingFactor * densityFactor;
             }
 
-            // [НОВОЕ: Дополнительная проверка пересечений после всех движений]
-            performPostCollisionCheck() {
-                // Проверяем все пары объектов на пересечения и корректируем их
-                for (let i = 0; i < this.objects.length; i++) {
-                    for (let j = i + 1; j < this.objects.length; j++) {
-                        const obj1 = this.objects[i];
-                        const obj2 = this.objects[j];
-
-                        // Пропускаем стабильные объекты с низкой скоростью
-                        if (obj1.isStable && obj2.isStable &&
-                            Math.abs(obj1.vx) < 0.1 && Math.abs(obj1.vy) < 0.1 &&
-                            Math.abs(obj2.vx) < 0.1 && Math.abs(obj2.vy) < 0.1) {
-                            continue;
-                        }
-
-                        const dx = obj2.x - obj1.x;
-                        const dy = obj2.y - obj1.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance === 0) continue; // Избегаем деления на ноль
-
-                        // Вычисляем требуемое минимальное расстояние с буферной зоной
-                        const minDistance = ((obj1.width + obj2.width) / 2) * 0.9; // Уменьшаем на 10% для плотного прилегания
-                        const bufferZone = Math.min(obj1.width, obj1.height, obj2.width, obj2.height) * 0.03; // 3% буфер
-                        const requiredDistance = minDistance + bufferZone;
-
-                        if (distance < requiredDistance) {
-                            // Вычисляем величину пересечения
-                            const overlap = requiredDistance - distance;
-
-                            // Разделяем объекты пропорционально их стабильности
-                            const obj1Factor = obj1.isStable ? 0.3 : 0.5;
-                            const obj2Factor = obj2.isStable ? 0.3 : 0.5;
-
-                            // Нормализованный вектор разделения
-                            const separationX = (dx / distance) * overlap;
-                            const separationY = (dy / distance) * overlap;
-
-                            // Применяем разделение с дополнительным множителем для надежности
-                            const correctionMultiplier = 1.0; // избегаем «перекоррекции», которая может залипать
-                            obj1.x -= separationX * obj1Factor * correctionMultiplier;
-                            obj1.y -= separationY * obj1Factor * correctionMultiplier;
-                            obj2.x += separationX * obj2Factor * correctionMultiplier;
-                            obj2.y += separationY * obj2Factor * correctionMultiplier;
-
-                            // Помечаем полигоны как грязные
-                            obj1.polygonDirty = true;
-                            obj2.polygonDirty = true;
-                        }
-                    }
-                }
-            }
-
             updateElement(obj) {
                 // Применяем общее масштабирование и деформацию
-                const combinedScale = obj.squish; // единый источник масштаба в transform
+                const combinedScale = obj.squish * this.scaleFactor;
 
                 obj.element.style.transform = `
                     translate(${obj.x}px, ${obj.y}px)
@@ -1497,7 +1352,7 @@
                     layerDepth: 0,                      // Глубина слоя (чем больше, тем ниже объект)
                     lastSignificantMovement: 0,         // Время последнего значительного движения
                     // [НОВОЕ: Формовые столкновения]
-                    localPolygon: this.buildLocalPolygon(newElement, 64), // Локальный выпуклый контур SVG с повышенной точностью
+                    localPolygon: this.buildLocalPolygon(newElement, 32), // Локальный выпуклый контур SVG
                     worldPolygon: null,                 // Мировой многоугольник (кэш)
                     polygonDirty: true,                 // Флаг необходимости пересчёта
                     _lastPolySig: null                  // Подпись трансформации для кэша
@@ -1507,8 +1362,8 @@
                 newElement.classList.add('jelly-object');
                 newElement.style.position = 'absolute';
                 newElement.style.transform = 'none';
-                newElement.style.visibility = 'visible';
-                newElement.style.zIndex = '2';
+                newElement.style.visibility = 'hidden';
+                newElement.style.zIndex = '-1';
 
                 this.objects.push(obj);
             }
@@ -1516,41 +1371,687 @@
 
         // Запускаем мармеладную физику когда страница загружена
         let jellyPhysics;
-
+        
         document.addEventListener('DOMContentLoaded', () => {
-            if (!ENABLE_JELLY) {
-                console.log('Jelly physics disabled');
-                return;
-            }
             // Небольшая задержка чтобы все элементы загрузились
             setTimeout(() => {
                 console.log('Инициализация мармеладной физики...');
                 jellyPhysics = new JellyPhysics();
-
-                // Добавляем новые объекты каждые 1.5 секунды
+                
+                // Добавляем новые объекты каждые 5 секунд
                 setInterval(() => {
-                    if (jellyPhysics && jellyPhysics.objects.length < 60) {
+                    if (jellyPhysics && jellyPhysics.objects.length < 60) {  // Немного меньше объектов для стабильности
                         jellyPhysics.addObject();
                     }
-                }, 1500);
-            }, 500);
+                }, 1500);  // Чуть реже добавляем объекты
+            }, 500); // Уменьшили задержку
         });
 
         // Обновляем размеры при изменении окна
         window.addEventListener('resize', () => {
-            if (ENABLE_JELLY && jellyPhysics) {
+            if (jellyPhysics) {
                 jellyPhysics.groundY = window.innerHeight;
             }
         });
     </script>
+</script>
 <script>
-  // Ensure Montserrat is applied globally
+  // Ensure Montserrat is loaded and applied globally
   (function applyMontserratFont() {
+    if (!document.getElementById('font-montserrat')) {
+      const link = document.createElement('link');
+      link.id = 'font-montserrat';
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap';
+      document.head.appendChild(link);
+    }
     // Define a CSS variable and apply to body for broad coverage
     const root = document.documentElement;
-    root.style.setProperty('--font-family', "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif");
-    document.body.style.fontFamily = 'var(--font-family)';
+    root.style.setProperty('--app-font', "'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif");
+    document.body.style.fontFamily = 'var(--app-font)';
   })();
     </script>
+<script>
+// 🍯 Реалистичная физика мармеладных объектов
+// Основана на вязкоупругой модели с внутренней структурой точечных масс
+
+class JellyPhysics {
+    constructor() {
+        this.objects = [];
+        this.gravity = 0.4;                 // Уменьшена гравитация для мягкого падения
+        
+        // ВЯЗКОУПРУГИЕ ПАРАМЕТРЫ (ключ к реалистичному желе)
+        this.viscosity = 0.15;              // Вязкость - сопротивление деформации (0..1)
+        this.elasticity = 0.8;              // Упругость - способность возвращаться в форму (0..1)
+        this.relaxationTime = 60;           // Время релаксации (кадры) - как быстро восстанавливается форма
+        this.dampingRatio = 0.3;            // Коэффициент затухания для oscillations
+        
+        // ДЕФОРМАЦИОННЫЕ ПАРАМЕТРЫ
+        this.maxDeformation = 0.6;          // Максимальная деформация (0.4 = 60% от размера)
+        this.deformationStiffness = 0.08;   // Жесткость восстановления формы
+        this.shearModulus = 0.12;           // Модуль сдвига для боковых деформаций
+        this.compressionModulus = 0.2;      // Модуль сжатия для вертикальных деформаций
+        
+        // ВЗАИМОДЕЙСТВИЯ
+        this.surfaceTension = 0.95;         // Поверхностное натяжение (стремление к круглой форме)
+        this.cohesion = 0.7;                // Слипание объектов друг с другом
+        this.groundFriction = 0.8;          // Трение с землей
+        this.groundY = window.innerHeight;
+        this.wallBounciness = 0.1;          // Минимальный отскок от стен
+        
+        // СИСТЕМА ВНУТРЕННИХ ТОЧЕК (для реалистичной деформации)
+        this.internalPointsPerObject = 5;   // Количество внутренних масс на объект
+        this.springConstant = 0.15;         // Константа пружин между точками
+        this.internalDamping = 0.85;        // Затухание внутренних колебаний
+        
+        this.animationId = null;
+        this.init();
+    }
+
+    init() {
+        const container = document.querySelector('.floating-shapes');
+        if (!container) {
+            console.error('Контейнер .floating-shapes не найден!');
+            return;
+        }
+        const elements = container.querySelectorAll('.snowflake');
+        console.log(`Создаем желейную физику для ${elements.length} объектов`);
+        elements.forEach(el => this.addExistingElement(el));
+        this.animate();
+    }
+
+    // ДОПОЛНИТЕЛЬНЫЕ МЕТОДЫ ДЛЯ НАСТРОЙКИ ЖЕЛЕЙНЫХ СВОЙСТВ
+    
+    // Делает объекты более вязкими (медленнее движение, больше слипание)
+    increaseViscosity(amount = 0.1) {
+        this.viscosity = Math.min(0.9, this.viscosity + amount);
+        console.log(`Вязкость увеличена до ${this.viscosity.toFixed(2)}`);
+    }
+    
+    // Делает объекты более упругими (быстрее восстановление формы)
+    increaseElasticity(amount = 0.1) {
+        this.elasticity = Math.min(1, this.elasticity + amount);
+        console.log(`Упругость увеличена до ${this.elasticity.toFixed(2)}`);
+    }
+    
+    // Изменяет время релаксации (как быстро желе успокаивается)
+    setRelaxationTime(frames) {
+        this.relaxationTime = Math.max(10, Math.min(200, frames));
+        console.log(`Время релаксации установлено: ${this.relaxationTime} кадров`);
+    }
+    
+    // Настройка силы деформации
+    setDeformationIntensity(factor) {
+        this.maxDeformation = Math.max(0.1, Math.min(0.8, factor));
+        this.deformationStiffness = this.maxDeformation * 0.15;
+        console.log(`Интенсивность деформации: ${this.maxDeformation.toFixed(2)}`);
+    }
+    
+    // Настройка слипания объектов
+    setCohesion(amount) {
+        this.cohesion = Math.max(0, Math.min(1, amount));
+        console.log(`Слипание установлено: ${this.cohesion.toFixed(2)}`);
+    }
+    
+    // Получить статистику для отладки
+    getStats() {
+        const activeObjects = this.objects.filter(obj => obj.energy > 0.5).length;
+        const avgEnergy = this.objects.reduce((sum, obj) => sum + obj.energy, 0) / this.objects.length;
+        const maxDeformation = Math.max(...this.objects.map(obj => 
+            Math.abs(obj.strain.x) + Math.abs(obj.strain.y)
+        ));
+        
+        return {
+            totalObjects: this.objects.length,
+            activeObjects: activeObjects,
+            averageEnergy: avgEnergy.toFixed(2),
+            maxDeformation: maxDeformation.toFixed(2),
+            viscosity: this.viscosity,
+            elasticity: this.elasticity
+        };
+    }
+    
+    // Создать желейный взрыв в точке (для интерактивности)
+    createJellyExplosion(x, y, force = 5) {
+        this.objects.forEach(obj => {
+            const dx = obj.x - x;
+            const dy = obj.y - y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const maxRadius = 150;
+            
+            if (distance < maxRadius) {
+                const proximity = 1 - (distance / maxRadius);
+                const explosionForce = force * proximity;
+                
+                // Добавляем радиальную силу
+                if (distance > 0) {
+                    obj.vx += (dx / distance) * explosionForce;
+                    obj.vy += (dy / distance) * explosionForce;
+                }
+                
+                // Сильная деформация от взрыва
+                obj.strain.x += (Math.random() - 0.5) * explosionForce * 0.1;
+                obj.strain.y += (Math.random() - 0.5) * explosionForce * 0.1;
+                obj.strainRate.x = explosionForce * 0.2;
+                obj.strainRate.y = explosionForce * 0.2;
+                
+                // Вращение от взрыва
+                obj.angularVelocity += (Math.random() - 0.5) * explosionForce * 0.05;
+                
+                // Запускаем длительную релаксацию
+                obj.relaxationCounter = this.relaxationTime * 2;
+                obj.energy += explosionForce;
+                obj.lastCollisionTime = Date.now();
+            }
+        });
+    }
+}
+
+// ИСПОЛЬЗОВАНИЕ:
+// const jellyPhysics = new JellyPhysics();
+// 
+// Настройка параметров:
+// jellyPhysics.increaseViscosity(0.2);     // Более вязкое желе
+// jellyPhysics.setDeformationIntensity(0.5); // Больше деформаций
+// jellyPhysics.setCohesion(0.8);           // Объекты сильнее слипаются
+//
+// Интерактивность:
+// document.addEventListener('click', (e) => {
+//     jellyPhysics.createJellyExplosion(e.clientX, e.clientY, 8);
+// });
+//
+// Отладка:
+// setInterval(() => console.log(jellyPhysics.getStats()), 5000);error('Контейнер .floating-shapes не найден!');
+            return;
+        }
+
+        const elements = container.querySelectorAll('.snowflake');
+        console.log(`Создаем желейную физику для ${elements.length} объектов`);
+
+        elements.forEach((element, index) => {
+            const width = this.getElementWidth(element);
+            const height = this.getElementHeight(element);
+
+            const obj = {
+                element: element,
+                
+                // ОСНОВНЫЕ ФИЗИЧЕСКИЕ СВОЙСТВА
+                x: Math.random() * (window.innerWidth - width),
+                y: -100 - Math.random() * 300,
+                vx: (Math.random() - 0.5) * 1,
+                vy: Math.random() * 1 + 0.5,
+                width: width,
+                height: height,
+                mass: this.getElementMass(element),
+                
+                // ВЯЗКОУПРУГИЕ СВОЙСТВА
+                strain: { x: 0, y: 0 },             // Текущая деформация
+                strainRate: { x: 0, y: 0 },         // Скорость деформации
+                stress: { x: 0, y: 0 },             // Внутреннее напряжение
+                relaxationCounter: 0,               // Счетчик времени релаксации
+                
+                // ФОРМА И ДЕФОРМАЦИЯ
+                scaleX: 1,                          // Масштаб по X (сжатие/растяжение)
+                scaleY: 1,                          // Масштаб по Y
+                shear: 0,                           // Сдвиг (наклон)
+                rotation: 0,
+                angularVelocity: 0,
+                
+                // ВНУТРЕННЯЯ СТРУКТУРА (точечные массы)
+                internalPoints: [],                 // Массы внутри объекта
+                restShape: { width: width, height: height }, // Форма покоя
+                
+                // СОСТОЯНИЕ
+                onGround: false,
+                energy: 0,                          // Кинетическая энергия для эффектов
+                lastCollisionTime: 0,
+                isActive: true                      // Активность объекта
+            };
+
+            // Создаем внутреннюю структуру точечных масс
+            this.createInternalStructure(obj);
+            
+            // Настраиваем DOM элемент
+            this.setupElement(obj.element);
+            
+            this.objects.push(obj);
+        });
+
+        this.startAnimation();
+    }
+    
+    // Создаем внутреннюю сеть точечных масс для реалистичной деформации
+    createInternalStructure(obj) {
+        const points = [];
+        const gridSize = Math.ceil(Math.sqrt(this.internalPointsPerObject));
+        
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                if (points.length >= this.internalPointsPerObject) break;
+                
+                points.push({
+                    localX: (i / (gridSize - 1)) || 0.5,  // Позиция 0..1
+                    localY: (j / (gridSize - 1)) || 0.5,
+                    vx: 0,
+                    vy: 0,
+                    mass: obj.mass / this.internalPointsPerObject
+                });
+            }
+        }
+        
+        obj.internalPoints = points;
+    }
+
+    setupElement(element) {
+        element.style.animation = 'none';
+        element.style.position = 'absolute';
+        element.style.transition = 'none';
+        element.style.transformOrigin = '50% 50%';
+        element.style.opacity = '0.8';
+        element.style.zIndex = '1';
+    }
+
+    getElementWidth(element) {
+        const svg = element.querySelector('svg');
+        return (svg ? parseInt(svg.getAttribute('width')) || 50 : 50) * 1.2;
+    }
+
+    getElementHeight(element) {
+        const svg = element.querySelector('svg');
+        return (svg ? parseInt(svg.getAttribute('height')) || 50 : 50) * 1.2;
+    }
+
+    getElementMass(element) {
+        const width = this.getElementWidth(element);
+        return Math.max(0.5, width / 80); // Меньше масса = более желейное поведение
+    }
+
+    update() {
+        this.objects.forEach((obj, index) => {
+            this.updateViscosity(obj);
+            this.updateElasticity(obj);
+            this.updateInternalStructure(obj);
+            this.updatePhysicalMovement(obj);
+            this.checkCollisions(obj, index);
+            this.updateDeformation(obj);
+            this.updateElement(obj);
+        });
+    }
+    
+    // ВЯЗКОСТЬ: сопротивление изменению формы
+    updateViscosity(obj) {
+        // Вязкое затухание зависит от скорости деформации
+        const strainMagnitude = Math.sqrt(obj.strainRate.x * obj.strainRate.x + obj.strainRate.y * obj.strainRate.y);
+        const viscousForce = this.viscosity * strainMagnitude;
+        
+        // Применяем вязкое сопротивление
+        obj.vx *= (1 - viscousForce * 0.1);
+        obj.vy *= (1 - viscousForce * 0.1);
+        obj.angularVelocity *= (1 - viscousForce * 0.2);
+        
+        // Обновляем скорость деформации
+        obj.strainRate.x *= 0.9;
+        obj.strainRate.y *= 0.9;
+    }
+    
+    // УПРУГОСТЬ: возвращение к исходной форме
+    updateElasticity(obj) {
+        // Упругая сила стремится вернуть объект к исходной форме
+        const elasticForceX = -obj.strain.x * this.elasticity * this.deformationStiffness;
+        const elasticForceY = -obj.strain.y * this.elasticity * this.deformationStiffness;
+        
+        // Применяем упругие силы к деформации
+        obj.strain.x += elasticForceX;
+        obj.strain.y += elasticForceY;
+        
+        // Релаксация - медленное возвращение к покою
+        if (obj.relaxationCounter > 0) {
+            obj.relaxationCounter--;
+            const relaxationFactor = 1 - (obj.relaxationCounter / this.relaxationTime);
+            obj.strain.x *= (1 - relaxationFactor * 0.02);
+            obj.strain.y *= (1 - relaxationFactor * 0.02);
+        }
+        
+        // Ограничиваем максимальную деформацию
+        obj.strain.x = Math.max(-this.maxDeformation, Math.min(this.maxDeformation, obj.strain.x));
+        obj.strain.y = Math.max(-this.maxDeformation, Math.min(this.maxDeformation, obj.strain.y));
+    }
+    
+    // Обновляем внутреннюю структуру точечных масс
+    
+
+    updatePhysicalMovement(obj) {
+        // Гравитация с учетом вязкости
+        obj.vy += this.gravity * (1 - this.viscosity * 0.3);
+        
+        // Обновляем позицию
+        obj.x += obj.vx;
+        obj.y += obj.vy;
+        
+        // Обновляем вращение с затуханием
+        obj.rotation += obj.angularVelocity;
+        obj.angularVelocity *= (1 - this.dampingRatio * 0.1);
+        
+        // Проверяем границы экрана
+        this.checkBounds(obj);
+        this.checkGroundCollision(obj);
+        
+        // Общее вязкое затухание (имитирует внутреннее трение желе)
+        obj.vx *= (1 - this.viscosity * 0.05);
+        obj.vy *= (1 - this.viscosity * 0.03);
+        
+        // Обновляем энергию для эффектов
+        obj.energy = Math.sqrt(obj.vx * obj.vx + obj.vy * obj.vy) + Math.abs(obj.angularVelocity) * 5;
+    }
+
+    checkCollisions(obj, currentIndex) {
+        this.objects.forEach((other, otherIndex) => {
+            if (currentIndex === otherIndex) return;
+
+            const dx = obj.x - other.x;
+            const dy = obj.y - other.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const minDistance = (obj.width + other.width) * 0.4; // Ближе для желейного контакта
+
+            if (distance < minDistance && distance > 0) {
+                this.handleJellyCollision(obj, other, dx, dy, distance, minDistance);
+            }
+        });
+    }
+    
+    // ЖЕЛЕЙНЫЕ СТОЛКНОВЕНИЯ: мягкие, с деформацией, без жестких отскоков
+    handleJellyCollision(obj1, obj2, dx, dy, distance, minDistance) {
+        const overlap = minDistance - distance;
+        const nx = dx / distance;
+        const ny = dy / distance;
+        
+        // Мягкое разделение (не резкое выталкивание)
+        const separationStrength = overlap * 0.3; // Мягче чем у твердых тел
+        obj1.x += nx * separationStrength * 0.5;
+        obj1.y += ny * separationStrength * 0.5;
+        obj2.x -= nx * separationStrength * 0.5;
+        obj2.y -= ny * separationStrength * 0.5;
+        
+        // ЖЕЛЕЙНАЯ ДЕФОРМАЦИЯ при столкновении
+        const impactForce = Math.sqrt(obj1.vx * obj1.vx + obj1.vy * obj1.vy) + 
+                           Math.sqrt(obj2.vx * obj2.vx + obj2.vy * obj2.vy);
+        
+        // Деформируем оба объекта
+        const deformationAmount = Math.min(this.maxDeformation, impactForce * 0.1);
+        
+        // Объект 1 деформируется в направлении контакта
+        obj1.strain.x += nx * deformationAmount * 0.3;
+        obj1.strain.y += ny * deformationAmount * 0.3;
+        obj1.strainRate.x = nx * impactForce * 0.1;
+        obj1.strainRate.y = ny * impactForce * 0.1;
+        
+        // Объект 2 деформируется в противоположном направлении
+        obj2.strain.x -= nx * deformationAmount * 0.3;
+        obj2.strain.y -= ny * deformationAmount * 0.3;
+        obj2.strainRate.x = -nx * impactForce * 0.1;
+        obj2.strainRate.y = -ny * impactForce * 0.1;
+        
+        // ВЯЗКОУПРУГИЙ ИМПУЛЬС (не резкий отскок, а мягкое перераспределение)
+        const relativeVx = obj1.vx - obj2.vx;
+        const relativeVy = obj1.vy - obj2.vy;
+        const relativeVelocityNormal = relativeVx * nx + relativeVy * ny;
+        
+        if (relativeVelocityNormal < 0) {
+            const totalMass = obj1.mass + obj2.mass;
+            const impulse = (2 * relativeVelocityNormal) / totalMass;
+            
+            // Мягкое перераспределение импульса (учитывает вязкость)
+            const impulseScale = (1 - this.viscosity * 0.5) * this.cohesion;
+            
+            obj1.vx -= impulse * obj2.mass * nx * impulseScale;
+            obj1.vy -= impulse * obj2.mass * ny * impulseScale;
+            obj2.vx += impulse * obj1.mass * nx * impulseScale;
+            obj2.vy += impulse * obj1.mass * ny * impulseScale;
+        }
+        
+        // ЖЕЛЕЙНОЕ СЛИПАНИЕ при медленном контакте
+        if (impactForce < 2) {
+            const stickiness = this.cohesion * (1 - impactForce * 0.2);
+            obj1.vx *= (1 - stickiness * 0.1);
+            obj1.vy *= (1 - stickiness * 0.1);
+            obj2.vx *= (1 - stickiness * 0.1);
+            obj2.vy *= (1 - stickiness * 0.1);
+        }
+        
+        // Запускаем релаксацию
+        obj1.relaxationCounter = this.relaxationTime;
+        obj2.relaxationCounter = this.relaxationTime;
+        obj1.lastCollisionTime = Date.now();
+        obj2.lastCollisionTime = Date.now();
+    }
+
+    checkGroundCollision(obj) {
+        if (obj.y + obj.height >= this.groundY) {
+            obj.y = this.groundY - obj.height;
+            obj.onGround = true;
+
+            // ЖЕЛЕЙНЫЙ УДАР О ЗЕМЛЮ: сильная деформация, минимальный отскок
+            const impactVelocity = Math.abs(obj.vy);
+            
+            // Вертикальное сжатие пропорционально скорости удара
+            const compressionAmount = Math.min(this.maxDeformation, impactVelocity * 0.15);
+            obj.strain.y -= compressionAmount; // Сжимаем по Y
+            obj.strain.x += compressionAmount * 0.3; // Растягиваем по X (как настоящее желе)
+            
+            // Обновляем скорости деформации
+            obj.strainRate.y = -impactVelocity * 0.2;
+            obj.strainRate.x = impactVelocity * 0.1;
+            
+            // Минимальный отскок с вязким затуханием
+            obj.vy = -obj.vy * this.wallBounciness * (1 - this.viscosity);
+            obj.vx *= this.groundFriction; // Трение
+            
+            // Гасим вращение при контакте с землей
+            obj.angularVelocity *= 0.3;
+            
+            // Запускаем релаксацию после удара
+            obj.relaxationCounter = this.relaxationTime * 1.5; // Дольше восстановление после удара о землю
+            obj.lastCollisionTime = Date.now();
+        } else {
+            obj.onGround = false;
+        }
+    }
+
+    checkBounds(obj) {
+        let hitWall = false;
+        
+        // Левая стена
+        if (obj.x < 0) {
+            obj.x = 0;
+            obj.vx = Math.abs(obj.vx) * this.wallBounciness;
+            obj.strain.x -= Math.abs(obj.vx) * 0.1; // Деформация при ударе о стену
+            hitWall = true;
+        }
+        
+        // Правая стена  
+        if (obj.x + obj.width > window.innerWidth) {
+            obj.x = window.innerWidth - obj.width;
+            obj.vx = -Math.abs(obj.vx) * this.wallBounciness;
+            obj.strain.x += Math.abs(obj.vx) * 0.1;
+            hitWall = true;
+        }
+        
+        if (hitWall) {
+            obj.relaxationCounter = this.relaxationTime;
+            obj.angularVelocity *= 0.4;
+        }
+    }
+    
+    // Обновляем деформацию на основе вязкоупругой модели
+    updateDeformation(obj) {
+        // Поверхностное натяжение стремится к круглой форме
+        const surfaceForceX = -Math.sign(obj.strain.x) * this.surfaceTension * 0.02;
+        const surfaceForceY = -Math.sign(obj.strain.y) * this.surfaceTension * 0.02;
+        
+        obj.strain.x += surfaceForceX;
+        obj.strain.y += surfaceForceY;
+        
+        // Преобразуем деформацию в визуальное масштабирование
+        obj.scaleX = 1 + obj.strain.x;
+        obj.scaleY = 1 + obj.strain.y;
+        
+        // Сдвиг как вторичная деформация
+        if (Math.abs(obj.angularVelocity) > 0.01) {
+            obj.shear += obj.angularVelocity * 0.5;
+            obj.shear *= 0.95; // Затухание сдвига
+        }
+        
+        // Ограничиваем сдвиг
+        obj.shear = Math.max(-0.3, Math.min(0.3, obj.shear));
+    }
+    
+    // Обновляем внутреннюю структуру для реалистичного поведения
+    updateInternalStructure(obj) {
+        // Влияние внешних сил на внутренние точки
+        obj.internalPoints.forEach(point => {
+            // Гравитация на внутренние массы
+            point.vy += this.gravity * 0.2;
+            
+            // Затухание внутренних движений
+            point.vx *= this.internalDamping;
+            point.vy *= this.internalDamping;
+            
+            // Ограничиваем внутренние скорости
+            const maxInternalSpeed = 0.5;
+            if (Math.abs(point.vx) > maxInternalSpeed) point.vx = Math.sign(point.vx) * maxInternalSpeed;
+            if (Math.abs(point.vy) > maxInternalSpeed) point.vy = Math.sign(point.vy) * maxInternalSpeed;
+        });
+        
+        // Вычисляем средние смещения для общей деформации
+        let avgDeviationX = 0;
+        let avgDeviationY = 0;
+        
+        obj.internalPoints.forEach(point => {
+            avgDeviationX += Math.abs(point.localX - 0.5);
+            avgDeviationY += Math.abs(point.localY - 0.5);
+        });
+        
+        avgDeviationX /= obj.internalPoints.length;
+        avgDeviationY /= obj.internalPoints.length;
+        
+        // Влияем на внешнюю деформацию через внутреннюю структуру
+        obj.strain.x += (avgDeviationX - 0.2) * 0.1;
+        obj.strain.y += (avgDeviationY - 0.2) * 0.1;
+    }
+
+    updateElement(obj) {
+        // Комбинируем все трансформации для желейного эффекта
+        const combinedScaleX = obj.scaleX * (1 + Math.sin(Date.now() * 0.01) * obj.energy * 0.01);
+        const combinedScaleY = obj.scaleY * (1 + Math.cos(Date.now() * 0.008) * obj.energy * 0.01);
+        
+        // Желейный тремор при высокой энергии
+        const tremor = obj.energy > 3 ? Math.sin(Date.now() * 0.1) * obj.energy * 0.2 : 0;
+        
+        obj.element.style.transform = `
+            translate(${obj.x + tremor}px, ${obj.y}px)
+            rotate(${obj.rotation + obj.shear * 0.1}rad)
+            scale(${combinedScaleX}, ${combinedScaleY})
+            skew(${obj.shear * 10}deg, 0deg)
+        `;
+        
+        // Визуальные эффекты: цвет зависит от деформации
+        const deformationIntensity = Math.abs(obj.strain.x) + Math.abs(obj.strain.y);
+        const opacity = Math.max(0.6, 1 - deformationIntensity * 0.5);
+        obj.element.style.opacity = opacity;
+        
+        // Размытие при быстром движении
+        const blur = Math.min(2, obj.energy * 0.1);
+        if (blur > 0.1) {
+            obj.element.style.filter = `blur(${blur}px)`;
+        } else {
+            obj.element.style.filter = 'none';
+        }
+    }
+
+    startAnimation() {
+        const animate = () => {
+            this.update();
+            this.animationId = requestAnimationFrame(animate);
+        };
+        animate();
+    }
+
+    stop() {
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+            this.animationId = null;
+        }
+    }
+
+    // Добавляем новый желейный объект
+    addObject() {
+        const container = document.querySelector('.floating-shapes');
+        const templates = container.querySelectorAll('.snowflake');
+        if (templates.length === 0) return;
+
+        const template = templates[Math.floor(Math.random() * templates.length)];
+        const newElement = template.cloneNode(true);
+        container.appendChild(newElement);
+
+        const width = this.getElementWidth(newElement);
+        const height = this.getElementHeight(newElement);
+
+        const obj = {
+            element: newElement,
+            x: Math.random() * (window.innerWidth - width),
+            y: -200 - Math.random() * 100,
+            vx: (Math.random() - 0.5) * 2,
+            vy: Math.random() + 0.5,
+            width: width,
+            height: height,
+            mass: this.getElementMass(newElement),
+            
+            // Вязкоупругие свойства
+            strain: { x: 0, y: 0 },
+            strainRate: { x: 0, y: 0 },
+            stress: { x: 0, y: 0 },
+            relaxationCounter: 0,
+            
+            // Форма
+            scaleX: 1,
+            scaleY: 1,
+            shear: 0,
+            rotation: 0,
+            angularVelocity: (Math.random() - 0.5) * 0.05,
+            
+            // Внутренняя структура
+            internalPoints: [],
+            restShape: { width: width, height: height },
+            
+            // Состояние
+            onGround: false,
+            energy: 5, // Новые объекты более энергичные
+            lastCollisionTime: Date.now(),
+            isActive: true
+        };
+
+        this.createInternalStructure(obj);
+        this.setupElement(obj.element);
+        this.objects.push(obj);
+        
+        console.log(`Добавлен новый желейный объект. Всего: ${this.objects.length}`);
+    }
+
+// Инициализация после загрузки DOM
+document.addEventListener('DOMContentLoaded', () => {
+  // Убедимся, что снежинки видимы
+  document.querySelectorAll('.floating-shapes .snowflake').forEach(el => el.style.display = 'block');
+
+  const jelly = new JellyPhysics();
+
+  // Взрыв желе по клику
+  window.addEventListener('click', e => jelly.createJellyExplosion(e.clientX, e.clientY, 8));
+
+  // Периодически добавлять новый объект
+  setInterval(() => jelly.addObject(), 6000);
+
+  window.jelly = jelly;
+});
+</script>
 </body>
 </html>
