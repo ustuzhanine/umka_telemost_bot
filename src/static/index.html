@@ -23,7 +23,7 @@
         /* Анимированный фон с глассморфизмом */
         body {
             font-family: var(--font-family);
-            background: linear-gradient(180deg, #0b0e12 0%, #263645 50%, #4745D7 100%);
+            background: #4745D7;
             color: var(--tg-theme-text-color, #ffffff);
             padding: 16px; line-height: 1.5;
             min-height: 100vh;
@@ -36,7 +36,7 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -2;
-            background: linear-gradient(180deg, #0b0e12 0%, #263645 50%, #4745D7 100%) !important;
+            background: #4745D7 !important;
         }
         
         /* Контейнер для мармеладных объектов */
@@ -258,12 +258,14 @@
         }
         .hidden { display: none; }
         .info-box {
-            background: var(--tg-theme-secondary-bg-color, #f0f8ff);
-            border: 1px solid var(--tg-theme-button-color, #0088cc);
-            border-radius: 8px; padding: 16px; margin-bottom: 16px;
+            background: rgba(255, 255, 255, 0.375);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px; padding: 16px; margin-bottom: var(--block-gap);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
-        .info-box h3 { color: var(--tg-theme-button-color, #0088cc); font-size: 16px; margin-bottom: 8px; }
-        .info-box p { font-size: 14px; color: var(--tg-theme-text-color, #000000); line-height: 1.4; }
+        .info-box h3 { color: #ffffff; font-size: 16px; margin-bottom: 8px; }
+        .info-box p { font-size: 14px; color: rgba(255, 255, 255, 0.9); line-height: 1.4; }
         @media (max-width: 480px) {
             body { padding: 12px; }
             .form-section { padding: 16px; }
