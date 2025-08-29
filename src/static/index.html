@@ -85,13 +85,13 @@
             z-index: 1;
         }
         
-        .header { 
+        .header {
             text-align: center; margin-bottom: var(--block-gap);
-            background: rgba(255, 255, 255, 0.375);  /* Менее прозрачный */
+            background: rgba(255, 255, 255, 0.1);  /* Более прозрачный */
             backdrop-filter: blur(20px);
             border-radius: 16px;
             padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.4);  /* Более заметная граница */
+            border: 1px solid rgba(255, 255, 255, 0.15);  /* Более прозрачная граница */
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);   /* Более заметная тень */
         }
         
@@ -109,12 +109,12 @@
         }
         
         .form-section {
-            background: rgba(255, 255, 255, 0.375);  /* Менее прозрачный */
+            background: rgba(255, 255, 255, 0.1);  /* Более прозрачный */
             backdrop-filter: blur(20px);
-            border-radius: 16px; 
-            padding: 24px; 
+            border-radius: 16px;
+            padding: 24px;
             margin-bottom: var(--block-gap);
-            border: 1px solid rgba(255, 255, 255, 0.4);  /* Более заметная граница */
+            border: 1px solid rgba(255, 255, 255, 0.15);  /* Более прозрачная граница */
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);   /* Более заметная тень */
         }
         .form-section h2 { 
@@ -133,19 +133,19 @@
         
         input[type="text"], input[type="email"], textarea, select {
             width: 100%; padding: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px; font-size: 13px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             color: #ffffff;
             text-align: center;
             transition: all 0.3s ease;
         }
         input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
-            outline: none; 
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.225);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
         
         input[type="text"]::placeholder, textarea::placeholder {
@@ -158,71 +158,71 @@
         .checkbox-group label { margin-bottom: 0; font-weight: normal; color: rgba(255, 255, 255, 0.9); }
         
         .button {
-            width: 100%; padding: 16px; 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.525), rgba(255, 255, 255, 0.375));  /* Менее прозрачный */
+            width: 100%; padding: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));  /* Более прозрачный */
             backdrop-filter: blur(20px);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.5);  /* Более заметная граница */
+            border: 1px solid rgba(255, 255, 255, 0.15);  /* Более прозрачная граница */
             border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;
             transition: all 0.3s ease; margin-bottom: var(--block-gap);
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);   /* Более заметная тень */
         }
-        .button:hover { 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.35));  /* Еще менее прозрачный при наведении */
+        .button:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));  /* Более прозрачный при наведении */
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);  /* Более заметная тень при наведении */
         }
 
         /* Создать встречу: зелёный стеклянный стиль как у остальных кнопок */
         #create-form .button {
-            background: linear-gradient(135deg, rgba(0, 255, 0, 0.35), rgba(0, 255, 0, 0.2)) !important;
-            border-color: rgba(0, 255, 0, 0.45) !important;
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.15), rgba(0, 255, 0, 0.1)) !important;
+            border-color: rgba(0, 255, 0, 0.15) !important;
             color: #ffffff !important;
         }
         #create-form .button:hover {
-            background: linear-gradient(135deg, rgba(0, 255, 0, 0.5), rgba(0, 255, 0, 0.3)) !important;
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.18), rgba(0, 255, 0, 0.12)) !important;
         }
         
         .button:disabled { opacity: 0.5; cursor: not-allowed; }
         
         .button-secondary {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.075));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
             color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         .share-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--block-gap); margin-top: var(--block-gap); }
         
-        .share-button { 
-            padding: 14px; 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.15));
+        .share-button {
+            padding: 14px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
             backdrop-filter: blur(15px);
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s ease; 
+            transition: all 0.3s ease;
             display: flex; align-items: center; justify-content: center; gap: 6px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
-        
-        .share-button:hover { 
+
+        .share-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.22));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
         }
         
-        .share-button.telegram { 
-            background: linear-gradient(135deg, rgba(0, 136, 204, 0.50), rgba(0, 136, 204, 0.32));
-            border-color: rgba(0, 136, 204, 0.55);
+        .share-button.telegram {
+            background: linear-gradient(135deg, rgba(0, 136, 204, 0.15), rgba(0, 136, 204, 0.1));
+            border-color: rgba(0, 136, 204, 0.15);
         }
         
         .share-button.copy {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.16));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.08));
             border: none;
         }
         
-        .share-button.browser { 
-            background: linear-gradient(135deg, rgba(40, 167, 69, 0.50), rgba(40, 167, 69, 0.32));
-            border-color: rgba(40, 167, 69, 0.55);
+        .share-button.browser {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.15), rgba(40, 167, 69, 0.1));
+            border-color: rgba(40, 167, 69, 0.15);
         }
         .status-message {
             text-align: center; 
@@ -246,21 +246,21 @@
 
         
         .meeting-link {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.225), rgba(255, 255, 255, 0.15));
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08));
             backdrop-filter: blur(15px);
             padding: var(--block-gap); border-radius: 12px; margin-top: var(--block-gap); word-break: break-all;
             font-family: var(--font-family);
-            font-size: 14px; 
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: #ffffff;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             display: none;
         }
         .hidden { display: none; }
         .info-box {
-            background: rgba(255, 255, 255, 0.375);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 12px; padding: 16px; margin-bottom: var(--block-gap);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
