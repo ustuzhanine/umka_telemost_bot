@@ -3,10 +3,6 @@ import sys
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-# Load environment variables
-from dotenv import load_dotenv
-load_dotenv()
-
 # Отключаем resource tracker для предотвращения предупреждений о leaked semaphore objects
 # Это безопасно для development среды, но в production лучше использовать gunicorn
 os.environ['PYTHONWARNINGS'] = 'ignore::UserWarning:multiprocessing.resource_tracker'
@@ -55,9 +51,4 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    # Get configuration from environment variables
-    host = os.getenv('HOST', '0.0.0.0')
-    port = int(os.getenv('PORT', 5000))
-    debug = os.getenv('DEBUG', 'False').lower() == 'true'
-
-    app.run(host=host, port=port, debug=debug)
+    app.run(host='0.0.0.0', port=5001, debug=True)
