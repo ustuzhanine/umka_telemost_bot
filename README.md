@@ -54,7 +54,20 @@ DOMAIN=your-domain.com
 
 ## Запуск
 
-### Локальная разработка
+### Docker (рекомендуется для всех сред)
+
+```bash
+# Сборка и запуск
+docker-compose up -d
+
+# Просмотр логов
+docker-compose logs -f
+
+# Остановка
+docker-compose down
+```
+
+### Локальная разработка (альтернативный способ)
 
 ```bash
 source venv/bin/activate
