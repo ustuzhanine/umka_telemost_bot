@@ -65,12 +65,36 @@ python src/main.py
 
 ### Развертывание
 
+#### Docker (рекомендуется)
+
+1. Создайте файл `.env` на основе `env.example`
+2. Запустите с помощью Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+Или с помощью Docker:
+
+```bash
+docker build -t telemost-app .
+docker run -p 5000:5000 --env-file .env telemost-app
+```
+
+#### Ручное развертывание
+
 Для развертывания в продакшене используйте WSGI сервер, например Gunicorn:
 
 ```bash
 pip install gunicorn
 gunicorn -w 4 -b 0.0.0.0:5000 src.main:app
 ```
+
+#### Настройка домена
+
+1. Разверните приложение на сервере
+2. Настройте домен `tg.umka-contur.ru` на ваш сервер
+3. Убедитесь, что приложение доступно по HTTPS
 
 ## API Endpoints
 
@@ -119,10 +143,16 @@ telemost_tg_app/
 1. Создайте бота через @BotFather
 2. Получите токен бота и добавьте в `.env`
 3. Настройте Web App в боте:
-   - Отправьте команду `/newapp` в @BotFather
+   - Отправьте команду `/setmenubutton` в @BotFather
    - Выберите вашего бота
-   - Укажите URL вашего приложения
+   - Выберите "Web App"
+   - Укажите URL: `https://tg.umka-contur.ru`
    - Добавьте описание и иконку
+4. Настройте Menu Button:
+   - Отправьте команду `/setmenubutton` @BotFather
+   - Выберите бота
+   - Укажите текст кнопки: "Создать встречу"
+   - Укажите URL: `https://tg.umka-contur.ru`
 
 ## Использование
 
